@@ -1,0 +1,5 @@
+# Object files from the Makefiles (%.o next to sources)
+*.o
+**/raytracer
+*.dSYM/
+.DS_Store
