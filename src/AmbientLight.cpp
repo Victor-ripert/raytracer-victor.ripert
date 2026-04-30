@@ -8,14 +8,16 @@
 #include "../include/AmbientLight.hpp"
 
 namespace RayTracer {
-    AmbiantLight::AmbiantLight() {
+    AmbientLight::AmbientLight() {
         origin = math::Point3D();
     }
 
-    AmbiantLight::AmbiantLight(math::Point3D point) : origin(point) {}
+    AmbientLight::AmbientLight(math::Point3D point) : origin(point) {}
 
-    Ray AmbiantLight::ray(math::Point3D point) {
-        math::Vector3D direction = point - origin;
+    Ray AmbientLight::ray(math::Point3D point) {
+        math::Vector3D direction;
+
+        direction = point - origin;
         return Ray(origin, direction);
     }
 }

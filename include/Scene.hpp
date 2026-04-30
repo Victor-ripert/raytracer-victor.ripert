@@ -9,7 +9,7 @@
 #ifndef SCENE_HPP
     #define SCENE_HPP
     #include <vector>
-    #include "IObject.hpp"
+    #include "objects/IObject.hpp"
     #include "AmbientLight.hpp"
     #define MAX_DISTANCE 1000
 
@@ -17,14 +17,14 @@ namespace RayTracer {
     class Scene {
         public:
         std::vector <IObject *> object_list;
-        AmbiantLight light;
+        AmbientLight light;
         Scene();
         ~Scene();
         void hit_object(Ray ray_obj);
-        bool hit_object_light(AmbiantLight l, math::Point3D target);
+        bool hit_object_light(AmbientLight l, math::Point3D target);
         void add_obj(IObject *obj);
-        void add_light(AmbiantLight new_light);
-        double getAngleFromLightAndSurface(math::Vector3D surfaceNormal, AmbiantLight l, math::Point3D surface);
+        void add_light(AmbientLight new_light);
+        double getAngleFromLightAndSurface(math::Vector3D surfaceNormal, AmbientLight l, math::Point3D surface);
     };
 }
 

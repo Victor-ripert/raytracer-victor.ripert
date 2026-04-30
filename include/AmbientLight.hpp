@@ -5,24 +5,24 @@
 ** Raytracing_bootstrap
 */
 
-#ifndef AMBIANTLIGHT_HPP
-    #define AMBIANTLIGHT_HPP
-    #include <cmath>
-    #include <iostream>
-    #include "Ray.hpp"
-    #include "Rectangle3D.hpp"
+#ifndef AMBIENTLIGHT_HPP
+#define AMBIENTLIGHT_HPP
+#include <cmath>
+#include <iostream>
+#include "Ray.hpp"
+#include "Rectangle3D.hpp"
 
 namespace RayTracer {
-    class AmbiantLight {
+    class AmbientLight {
         private:
         public:
             math::Point3D origin;
 
-            AmbiantLight();
-            AmbiantLight(math::Point3D point);
+            AmbientLight();
+            AmbientLight(math::Point3D point);
             Ray ray(math::Point3D point);
             void display();
     };
 }
 
-#endif /* AMBIANTLIGHT_HPP */
+#endif /* AMBIENTLIGHT_HPP */

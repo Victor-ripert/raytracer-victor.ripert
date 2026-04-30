@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-NAME = raytracing
+NAME = raytracer
 
 CXXFLAGS = -std=c++20 -Wall -Wextra -Werror -I.
 
@@ -19,7 +19,7 @@ SRC =	main.cpp \
 		src/Plain.cpp \
 		src/Scene.cpp \
 		src/Color.cpp \
-		src/AmbiantLight.cpp
+		src/AmbientLight.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

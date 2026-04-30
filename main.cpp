@@ -8,7 +8,7 @@
 
 #include "include/Vector3D.hpp"
 #include "include/Point3D.hpp"
-#include "include/Sphere.hpp"
+#include "include/objects/Sphere.hpp"
 #include "include/Rectangle3D.hpp"
 #include "include/Camera.hpp"
 #include "include/Plain.hpp"
@@ -23,7 +23,7 @@ int main() {
     std::cout << "P3\n" << width << ' ' << height << "\n255" << std::endl;
     RayTracer::Camera cam;
     RayTracer::Scene scene;
-    RayTracer::AmbiantLight light(math::Point3D(1, 0, 0));
+    RayTracer::AmbientLight light(math::Point3D(1, 0, 0));
     scene.add_light(light);
     // RayTracer::Plain p(math::Point3D(10, 10, -5), math::Vector3D(0, 1, 1));
     // RayTracer::Sphere s(math::Point3D(0, 0, -10), 5, RayTracer::Color(255, 0, 255)); // Rose
