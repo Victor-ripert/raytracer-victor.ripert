@@ -30,8 +30,7 @@ namespace RayTracer {
             if (!obj->hits(ray_obj, 1e-6, MAX_DISTANCE))
                 continue;
             candidate_pos = obj->get_last_hit_point();
-            new_distance =
-                candidate_pos.distance_point(ray_obj._origin);
+            new_distance = candidate_pos.distance_point(ray_obj._origin);
             if (!any_hit || new_distance < distance_min) {
                 any_hit = true;
                 distance_min = new_distance;

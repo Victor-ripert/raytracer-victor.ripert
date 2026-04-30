@@ -16,7 +16,7 @@ SRC =	main.cpp \
 		src/Sphere.cpp \
 		src/Rectangle3D.cpp \
 		src/Camera.cpp \
-		src/Plain.cpp \
+		src/Plane.cpp \
 		src/Scene.cpp \
 		src/Color.cpp \
 		src/AmbientLight.cpp

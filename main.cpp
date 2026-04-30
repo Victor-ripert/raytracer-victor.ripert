@@ -11,7 +11,7 @@
 #include "include/objects/Sphere.hpp"
 #include "include/Rectangle3D.hpp"
 #include "include/Camera.hpp"
-#include "include/Plain.hpp"
+#include "include/objects/Plane.hpp"
 #include "include/Scene.hpp"
 #include "include/Color.hpp"
 #include "include/AmbientLight.hpp"
@@ -25,7 +25,7 @@ int main() {
     RayTracer::Scene scene;
     RayTracer::AmbientLight light(math::Point3D(1, 0, 0));
     scene.add_light(light);
-    // RayTracer::Plain p(math::Point3D(10, 10, -5), math::Vector3D(0, 1, 1));
+    // RayTracer::Plane ground(math::Point3D(0, 0, 0), math::Vector3D(0, 1, 0), RayTracer::Color(100, 100, 100));
     // RayTracer::Sphere s(math::Point3D(0, 0, -10), 5, RayTracer::Color(255, 0, 255)); // Rose
     RayTracer::Sphere s2(math::Point3D(1.5, 0, -2), 0.5, RayTracer::Color(0, 0, 255)); // Bleu
     // RayTracer::Sphere s3(math::Point3D(-4, -4, -12.5), 5, RayTracer::Color(245, 73, 39)); // Saumon
