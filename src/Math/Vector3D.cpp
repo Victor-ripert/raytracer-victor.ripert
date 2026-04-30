@@ -27,7 +27,7 @@ namespace math {
         return sqrt(_x * _x + _y * _y + _z * _z);
     }
 
-    double Vector3D::dot(Vector3D vec) {
+    double Vector3D::dot(const Vector3D &vec) const {
         return _x * vec._x + _y * vec._y + _z * vec._z;
     }
 

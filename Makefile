@@ -2,7 +2,7 @@
 ## EPITECH PROJECT, 2026
 ## Raytracer
 ## File description:
-## Makefile for Core and Plugins
+## Makefile (FIXED: Isolated Plugin Sources)
 ##
 
 NAME = raytracer
@@ -24,15 +24,17 @@ CORE_SRC =	main.cpp \
 
 CORE_OBJ = $(CORE_SRC:.cpp=.o)
 
-# Plugins
-PLUGINS_DIR = plugins
+# Plugins (Sources in src_plugins, Binaries in plugins)
+PLUGINS_OUT_DIR = plugins
+PLUGINS_SRC_DIR = src_plugins
+
 SPHERE_NAME = sphere.so
 PLANE_NAME = plane.so
 
-SPHERE_SRC = plugins/Primitives/Sphere/Sphere.cpp
-PLANE_SRC = plugins/Primitives/Plane/Plane.cpp
+SPHERE_SRC = $(PLUGINS_SRC_DIR)/Primitives/Sphere/Sphere.cpp
+PLANE_SRC = $(PLUGINS_SRC_DIR)/Primitives/Plane/Plane.cpp
 
-# Shared source files needed by plugins (Math, Color)
+# Shared source files needed by plugins
 SHARED_SRC = src/Math/Vector3D.cpp \
              src/Math/Point3D.cpp \
              src/Math/Ray.cpp \
@@ -43,22 +45,22 @@ all: $(NAME) plugins
 $(NAME): $(CORE_OBJ)
 	$(CXX) $(CXXFLAGS) $(CORE_OBJ) -o $(NAME) $(LDFLAGS)
 
-plugins: $(PLUGINS_DIR)/$(SPHERE_NAME) $(PLUGINS_DIR)/$(PLANE_NAME)
+plugins: $(PLUGINS_OUT_DIR)/$(SPHERE_NAME) $(PLUGINS_OUT_DIR)/$(PLANE_NAME)
 
-$(PLUGINS_DIR)/$(SPHERE_NAME): $(SPHERE_SRC) $(SHARED_SRC)
-	@mkdir -p $(PLUGINS_DIR)
+$(PLUGINS_OUT_DIR)/$(SPHERE_NAME): $(SPHERE_SRC) $(SHARED_SRC)
+	@mkdir -p $(PLUGINS_OUT_DIR)
 	$(CXX) $(CXXFLAGS) -shared $^ -o $@
 
-$(PLUGINS_DIR)/$(PLANE_NAME): $(PLANE_SRC) $(SHARED_SRC)
-	@mkdir -p $(PLUGINS_DIR)
+$(PLUGINS_OUT_DIR)/$(PLANE_NAME): $(PLANE_SRC) $(SHARED_SRC)
+	@mkdir -p $(PLUGINS_OUT_DIR)
 	$(CXX) $(CXXFLAGS) -shared $^ -o $@
 
 clean:
 	rm -f $(CORE_OBJ)
-	rm -rf $(PLUGINS_DIR)
 
 fclean: clean
 	rm -f $(NAME)
+	rm -rf $(PLUGINS_OUT_DIR)
 
 re: fclean all
 

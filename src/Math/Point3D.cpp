@@ -59,8 +59,8 @@ namespace math {
         _z += point._z;
     }
 
-    Point3D Point3D::operator-(Point3D point) const {
-        return Point3D((_x - point._x), (_y - point._y), (_z - point._z));
+    Vector3D Point3D::operator-(const Point3D point) const {
+        return Vector3D(_x - point._x, _y - point._y, _z - point._z);
     }
 
     void Point3D::operator-=(const Point3D point) {

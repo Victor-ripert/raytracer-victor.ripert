@@ -32,7 +32,7 @@ namespace math {
 
             Point3D operator+(const Point3D point) const;
             void operator+=(const Point3D point);
-            Point3D operator-(const Point3D point) const;
+            Vector3D operator-(const Point3D point) const;
             void operator-=(const Point3D point);
 
             bool operator==(const Point3D point) const;
