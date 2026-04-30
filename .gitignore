@@ -1,5 +1,51 @@
-# Object files from the Makefiles (%.o next to sources)
+# Compiled object files
+*.d
+*.slo
+*.lo
 *.o
-**/raytracer
+*.obj
+*.gch
+*.pch
 *.dSYM/
+
+# Compiled libraries
+*.so
+*.dylib
+*.dll
+*.lai
+*.la
+*.a
+*.lib
+
+# IDEs and Editors
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.code-workspace
+
+# Os generated files
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.Spotlight-V100
+.Trashes
+.VolumeIcon.icns
+.AppleDB
+.AppleDesktop
+
+# Miscellaneous
+**/raytracer
+raytracer.pdf
