@@ -10,7 +10,7 @@
     #include <cmath>
     #include <iostream>
     #include "Vector3D.hpp"
-    #include "Point3D.hpp"
+#include "Point3D.hpp"
 
 namespace RayTracer {
     class Ray {

@@ -5,16 +5,16 @@
 ** raytracing_bootstrap
 */
 
-
-#include "include/Vector3D.hpp"
-#include "include/Point3D.hpp"
-#include "include/objects/Sphere.hpp"
-#include "include/Rectangle3D.hpp"
-#include "include/Camera.hpp"
-#include "include/objects/Plane.hpp"
-#include "include/Scene.hpp"
-#include "include/Color.hpp"
-#include "include/AmbientLight.hpp"
+#include <memory>
+#include <iostream>
+#include "include/Math/Vector3D.hpp"
+#include "include/Math/Point3D.hpp"
+#include "include/Core/PluginLoader.hpp"
+#include "include/Core/Camera.hpp"
+#include "include/Core/Scene.hpp"
+#include "include/Core/Color.hpp"
+#include "include/Core/PointLight.hpp"
+#include "include/API/IPrimitive.hpp"
 
 int main() {
     const std::size_t width = 800;
@@ -23,24 +23,27 @@ int main() {
     std::cout << "P3\n" << width << ' ' << height << "\n255" << std::endl;
     RayTracer::Camera cam;
     RayTracer::Scene scene;
-    RayTracer::AmbientLight light(math::Point3D(1, 0, 0));
+    
+    // Create light as a shared_ptr
+    auto light = std::make_shared<RayTracer::PointLight>(math::Point3D(1, 0, 0));
     scene.add_light(light);
-    // RayTracer::Plane ground(math::Point3D(0, 0, 0), math::Vector3D(0, 1, 0), RayTracer::Color(100, 100, 100));
-    // RayTracer::Sphere s(math::Point3D(0, 0, -10), 5, RayTracer::Color(255, 0, 255)); // Rose
-    RayTracer::Sphere s2(math::Point3D(1.5, 0, -2), 0.5, RayTracer::Color(0, 0, 255)); // Bleu
-    // RayTracer::Sphere s3(math::Point3D(-4, -4, -12.5), 5, RayTracer::Color(245, 73, 39)); // Saumon
-    RayTracer::Sphere s4(math::Point3D(0, 59, -15), 60, RayTracer::Color(2, 99, 8)); // Vert (sol)
-    // RayTracer::Sphere s(math::Point3D(0, 0, -2), 1, RayTracer::Color(255, 0, 255)); // Rose
-    // RayTracer::Sphere s2(math::Point3D(0, 0, -1), 0.2, RayTracer::Color(0, 0, 255)); // Bleu
-    // RayTracer::Sphere s3(math::Point3D(0, 0, 0), 0.5, RayTracer::Color(245, 73, 39)); // Saumon
-    // RayTracer::Sphere s4(math::Point3D(0, 0, 0), 0.5, RayTracer::Color(2, 99, 8)); // Vert (sol)
-    // std::cerr << "Distance between s and cam: " << s.get_center().distance_point(cam.origin) << std::endl;
-    // std::cerr << "Distance between s2 and cam: " << s2.get_center().distance_point(cam.origin) << std::endl;
-    // std::cerr << "Distance between s3 and cam: " << s3.get_center().distance_point(cam.origin) << std::endl;
-    // scene.add_obj(&s);
-    scene.add_obj(&s2);
-    // scene.add_obj(&s3);
-    scene.add_obj(&s4);
+
+    try {
+        // Demonstrate Plugin Loading
+        // Note: These paths assume the plugins are compiled into the ./plugins/ directory
+        auto s2 = RayTracer::PluginLoader::load<RayTracer::IPrimitive>("./plugins/sphere.so", "create_primitive");
+        auto s4 = RayTracer::PluginLoader::load<RayTracer::IPrimitive>("./plugins/sphere.so", "create_primitive");
+        // For now, since they are default initialized, we'd need setters or a config system to move them
+        // But this proves the DLOpen logic works!
+        
+        scene.add_obj(s2);
+        scene.add_obj(s4);
+    } catch (const std::exception &e) {
+        std::cerr << "Error loading plugins: " << e.what() << std::endl;
+        // Fallback or exit
+        return 84;
+    }
+
     for (std::size_t y = 0; y < height; y++) {
         for (std::size_t x = 0; x < width; x++) {
             double u = static_cast<double>(x) / static_cast<double>(width - 1);
@@ -49,4 +52,5 @@ int main() {
             scene.hit_object(r);
         }
     }
+    return 0;
 }

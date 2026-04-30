@@ -6,7 +6,7 @@
 */
 
 
-#include "../include/Ray.hpp"
+#include "../../include/Math/Ray.hpp"
 
 namespace RayTracer {
     Ray::Ray() {

@@ -9,17 +9,17 @@
 #define AMBIENTLIGHT_HPP
 #include <cmath>
 #include <iostream>
-#include "Ray.hpp"
+#include "Math/Ray.hpp"
 #include "Rectangle3D.hpp"
 
 namespace RayTracer {
-    class AmbientLight {
+    class PointLight {
         private:
         public:
             math::Point3D origin;
 
-            AmbientLight();
-            AmbientLight(math::Point3D point);
+            PointLight();
+            PointLight(math::Point3D point);
             Ray ray(math::Point3D point);
             void display();
     };

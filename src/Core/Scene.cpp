@@ -5,16 +5,14 @@
 ** RayTracer
 */
 
-
 #include <cmath>
-#include "../include/Scene.hpp"
-#include "../include/Color.hpp"
-#include "../include/objects/Sphere.hpp"
+#include <iostream>
+#include <memory>
+#include "../include/Core/Scene.hpp"
+#include "../include/Core/Color.hpp"
 
 namespace RayTracer {
-    Scene::Scene() {}
-
-    Scene::~Scene() {}
+    Scene::Scene() : light(nullptr) {}
 
     void Scene::hit_object(Ray ray_obj) {
         double distance_min = MAX_DISTANCE;
@@ -26,7 +24,7 @@ namespace RayTracer {
         double new_distance = 0.0;
         double light_angle = 0.0;
 
-        for (auto obj : object_list) {
+        for (auto &obj : object_list) {
             if (!obj->hits(ray_obj, 1e-6, MAX_DISTANCE))
                 continue;
             candidate_pos = obj->get_last_hit_point();
@@ -39,60 +37,56 @@ namespace RayTracer {
                 color = obj->get_last_hit_surface_color();
             }
         }
+
         if (!any_hit) {
             std::cout << "0 0 0" << std::endl;
-        } else {
+        } else if (light) {
             if (!hit_object_light(light, hit_pos)) {
-                light_angle =
-                    getAngleFromLightAndSurface(surface_normal,
-                        light,
-                        hit_pos);
+                light_angle = getAngleFromLightAndSurface(surface_normal, light, hit_pos);
                 color.setShade(1 - light_angle);
                 color.setShade(0.20);
-                // color = Color(0, 0, 0);
             } else {
-                light_angle =
-                    getAngleFromLightAndSurface(surface_normal,
-                        light,
-                        hit_pos);
+                light_angle = getAngleFromLightAndSurface(surface_normal, light, hit_pos);
                 color.setShade(1 - light_angle);
             }
+            std::cout << color.to_str() << std::endl;
+        } else {
+            // No light in scene, render flat color or black
             std::cout << color.to_str() << std::endl;
         }
     }
 
-    bool Scene::hit_object_light(AmbientLight l, math::Point3D target) {
-        Ray ray_obj;
-        double target_distance = 0.0;
-        double new_distance = 0.0;
+    bool Scene::hit_object_light(std::shared_ptr<ILight> l, math::Point3D target) {
+        if (!l) return true;
+        
+        Ray ray_to_light = l->getRayToLight(target);
+        double target_distance = l->getDistanceToLight(target);
 
-        ray_obj = l.ray(target);
-        target_distance = target.distance_point(l.origin);
-        for (auto obj : object_list) {
-            if (!obj->hits(ray_obj, 1e-6, MAX_DISTANCE))
+        for (auto &obj : object_list) {
+            if (!obj->hits(ray_to_light, 1e-6, MAX_DISTANCE))
                 continue;
-            new_distance = obj->get_last_hit_point().distance_point(
-                l.origin);
-            if (new_distance + 1e-6 < target_distance)
+            double new_distance = obj->get_last_hit_point().distance_point(target);
+            if (new_distance < target_distance - 1e-6)
                 return false;
         }
         return true;
     }
 
-    void Scene::add_obj(IObject *obj) {
+    void Scene::add_obj(std::shared_ptr<IPrimitive> obj) {
         object_list.push_back(obj);
     }
 
-    void Scene::add_light(AmbientLight new_light) {
+    void Scene::add_light(std::shared_ptr<ILight> new_light) {
         light = new_light;
     }
 
     double Scene::getAngleFromLightAndSurface(math::Vector3D surfaceNormal,
-        AmbientLight l,
+        std::shared_ptr<ILight> l,
         math::Point3D surface) {
-        math::Vector3D light_direction;
-
-        light_direction = surface - l.origin;
-        return light_direction.dot(surfaceNormal);
+        if (!l) return 0.0;
+        
+        math::Vector3D light_direction = math::Vector3D(l->getPosition() - surface).normalize();
+        double dot = light_direction.dot(surfaceNormal);
+        return (dot < 0) ? 0 : dot;
     }
 }

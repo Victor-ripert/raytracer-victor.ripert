@@ -5,7 +5,7 @@
 ** RayTracer
 */
 
-#include "../include/Color.hpp"
+#include "../include/Core/Color.hpp"
 
 namespace RayTracer {
     Color::Color() {

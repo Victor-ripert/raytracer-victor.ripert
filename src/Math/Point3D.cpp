@@ -5,8 +5,8 @@
 ** Raytracing_bootstrap
 */
 
-#include "../include/Point3D.hpp"
-#include "../include/Vector3D.hpp"
+#include "../../include/Math/Point3D.hpp"
+#include "../../include/Math/Vector3D.hpp"
 
 namespace math {
     Point3D::Point3D() {

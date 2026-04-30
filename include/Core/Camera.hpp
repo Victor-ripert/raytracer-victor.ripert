@@ -9,8 +9,8 @@
     #define CAMERA_HPP
     #include <cmath>
     #include <iostream>
-    #include "Ray.hpp"
-    #include "Rectangle3D.hpp"
+    #include "../Math/Ray.hpp"
+#include "../Rectangle3D.hpp"
 
 namespace RayTracer {
     class Camera {

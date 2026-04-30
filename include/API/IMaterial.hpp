@@ -10,9 +10,9 @@
 
 #include <optional>
 #include <string>
-#include "../Point3D.hpp"
-#include "../Ray.hpp"
-#include "../Vector3D.hpp"
+#include "../Math/Point3D.hpp"
+#include "../Math/Ray.hpp"
+#include "../Math/Vector3D.hpp"
 
 namespace RayTracer {
 

@@ -9,7 +9,7 @@
     #define RECTANGLE_HPP
     #include <cmath>
     #include <iostream>
-    #include "Ray.hpp"
+    #include "Math/Ray.hpp"
 
 namespace RayTracer {
     class Rectangle3D {

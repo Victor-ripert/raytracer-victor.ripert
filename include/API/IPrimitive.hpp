@@ -10,17 +10,17 @@
 
 #include <memory>
 #include <string>
-#include "../Color.hpp"
-#include "../Ray.hpp"
+#include "../Core/Color.hpp"
+#include "../Math/Ray.hpp"
 
 namespace RayTracer {
 
     class IMaterial;
     class ITransformation;
 
-    class IObject {
+    class IPrimitive {
     public:
-        virtual ~IObject() = default;
+        virtual ~IPrimitive() = default;
 
         virtual bool hits(const Ray &ray, double tMin, double tMax) const = 0;
 
