@@ -11,6 +11,21 @@ CXX = g++
 CXXFLAGS = -std=c++20 -Wall -Wextra -Werror -I./include -fPIC -g3
 LDFLAGS = -ldl
 
+LIBCONFIG_LDFLAGS = $(shell pkg-config --silence-errors --libs libconfig++ 2>/dev/null)
+LIBCONFIG_CFLAGS  = $(shell pkg-config --silence-errors --cflags libconfig++ 2>/dev/null)
+ifeq ($(strip $(LIBCONFIG_LDFLAGS)),)
+LIBCONFIG_HOME = $(shell brew --prefix libconfig 2>/dev/null)
+ifneq ($(strip $(LIBCONFIG_HOME)),)
+LIBCONFIG_CFLAGS  = -I$(LIBCONFIG_HOME)/include
+LIBCONFIG_LDFLAGS = -L$(LIBCONFIG_HOME)/lib -lconfig++
+else
+LIBCONFIG_LDFLAGS = -lconfig++
+endif
+endif
+
+CXXFLAGS += $(LIBCONFIG_CFLAGS)
+LDFLAGS += $(LIBCONFIG_LDFLAGS)
+
 # Core Source Files
 CORE_SRC =	main.cpp \
 			src/Math/Vector3D.cpp \
@@ -20,7 +35,13 @@ CORE_SRC =	main.cpp \
 			src/Core/Camera.cpp \
 			src/Core/Color.cpp \
 			src/Core/PointLight.cpp \
-			src/Core/Rectangle3D.cpp
+			src/Core/DirectionalLight.cpp \
+			src/Core/Rectangle3D.cpp \
+			src/Core/LibConfigLoader.cpp \
+			src/Core/ConfigParse.cpp \
+			src/Core/PrimitiveFactory.cpp \
+			src/Core/LightFactory.cpp \
+			src/Core/SceneBuilder.cpp
 
 CORE_OBJ = $(CORE_SRC:.cpp=.o)
 
