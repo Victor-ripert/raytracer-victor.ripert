@@ -11,8 +11,8 @@
 #include <string>
 #include <dlfcn.h>
 #include <memory>
-#include <stdexcept>
 #include <iostream>
+#include "errors/RayTracerErrors.hpp"
 
 namespace RayTracer {
 
@@ -36,7 +36,10 @@ namespace RayTracer {
         static std::shared_ptr<T> load(const std::string &path, const std::string &entryPoint) {
             void *handle = dlopen(path.c_str(), RTLD_LAZY);
             if (!handle) {
-                throw std::runtime_error("PluginLoader: Failed to load " + path + ": " + dlerror());
+                const char *load_error = dlerror();
+                throw ErrorPlugin(
+                    std::string("PluginLoader: Failed to load ") + path + ": "
+                    + (load_error ? load_error : "unknown error"));
             }
 
             // Reset errors
@@ -50,14 +53,15 @@ namespace RayTracer {
             const char *error = dlerror();
             if (error) {
                 dlclose(handle);
-                throw std::runtime_error("PluginLoader: Failed to find symbol " + entryPoint + " in " + path + ": " + error);
+                throw ErrorPlugin(
+                    std::string("PluginLoader: Failed to find symbol ") + entryPoint + " in " + path + ": " + error);
             }
 
             // Create the instance
             T *instance = factory();
             if (!instance) {
                 dlclose(handle);
-                throw std::runtime_error("PluginLoader: Factory returned null in " + path);
+                throw ErrorPlugin("PluginLoader: Factory returned null in " + path);
             }
 
             // Return shared_ptr with a custom deleter that also closes the library handle
