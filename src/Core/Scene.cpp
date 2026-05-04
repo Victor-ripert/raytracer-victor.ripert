@@ -85,7 +85,7 @@ namespace RayTracer {
         math::Point3D surface) {
         if (!l) return 0.0;
         
-        math::Vector3D light_direction = math::Vector3D(l->getPosition() - surface).normalize();
+        math::Vector3D light_direction = l->vectorSurfaceToLight(surface).normalize();
         double dot = light_direction.dot(surfaceNormal);
         return (dot < 0) ? 0 : dot;
     }

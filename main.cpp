@@ -5,52 +5,52 @@
 ** raytracing_bootstrap
 */
 
-#include <memory>
 #include <iostream>
-#include "include/Math/Vector3D.hpp"
-#include "include/Math/Point3D.hpp"
-#include "include/Core/PluginLoader.hpp"
-#include "include/Core/Camera.hpp"
-#include "include/Core/Scene.hpp"
-#include "include/Core/Color.hpp"
-#include "include/Core/PointLight.hpp"
-#include "include/API/IPrimitive.hpp"
+#include <memory>
+#include <string>
+#include "Core/Camera.hpp"
+#include "Core/Scene.hpp"
+#include "Core/SceneBuilder.hpp"
+#include "errors/IError.hpp"
 
-int main() {
-    const std::size_t width = 800;
-    const std::size_t height = 600;
-
-    std::cout << "P3\n" << width << ' ' << height << "\n255" << std::endl;
-    RayTracer::Camera cam;
-    RayTracer::Scene scene;
+int main(int argc, char **argv)
+{
+    constexpr int EXIT_OK = 0;
+    constexpr int EXIT_ERROR = 84;
     
-    // Create light as a shared_ptr
-    auto light = std::make_shared<RayTracer::PointLight>(math::Point3D(1, 0, 0));
-    scene.add_light(light);
+    if (argc != 2) {
+        std::cout << "USAGE: ./raytracer <SCENE.cfg>\n";
+        return EXIT_ERROR;
+    }
+    if (std::string(argv[1]) == "--help" || std::string(argv[1]) == "-h") {
+        std::cout << "USAGE: ./raytracer <SCENE.cfg>\n";
+        return EXIT_OK;
+    }
 
     try {
-        // Demonstrate Plugin Loading
-        // Note: These paths assume the plugins are compiled into the ./plugins/ directory
-        auto s2 = RayTracer::PluginLoader::load<RayTracer::IPrimitive>("./plugins/sphere.so", "create_primitive");
-        auto s4 = RayTracer::PluginLoader::load<RayTracer::IPrimitive>("./plugins/sphere.so", "create_primitive");
-        // For now, since they are default initialized, we'd need setters or a config system to move them
-        // But this proves the DLOpen logic works!
-        
-        scene.add_obj(s2);
-        scene.add_obj(s4);
-    } catch (const std::exception &e) {
-        std::cerr << "Error loading plugins: " << e.what() << std::endl;
-        // Fallback or exit
-        return 84;
+        RayTracer::Scene scene;
+        RayTracer::Camera camera;
+        RayTracer::RenderParams renderParams;
+
+        RayTracer::SceneBuilder::build(argv[1], scene, camera, renderParams);
+
+        std::cout << "P3\n" << renderParams.width << ' ' << renderParams.height << "\n255\n";
+
+        for (unsigned int y = 0; y < renderParams.height; ++y) {
+            for (unsigned int x = 0; x < renderParams.width; ++x) {
+                const double u = static_cast<double>(x) / static_cast<double>(renderParams.width - 1);
+                const double v = static_cast<double>(y) / static_cast<double>(renderParams.height - 1);
+                const RayTracer::Ray ray = camera.ray(u, v);
+                scene.hit_object(ray);
+            }
+        }
+    } catch (const RayTracer::IError &error) {
+        std::cerr << error.what() << std::endl;
+        return EXIT_ERROR;
+    } catch (const std::exception &error) {
+        std::cerr << "Type: Unknown\nMessage: " << error.what() << std::endl;
+        return EXIT_ERROR;
     }
 
-    for (std::size_t y = 0; y < height; y++) {
-        for (std::size_t x = 0; x < width; x++) {
-            double u = static_cast<double>(x) / static_cast<double>(width - 1);
-            double v = static_cast<double>(y) / static_cast<double>(height - 1);
-            RayTracer::Ray r = cam.ray(u, v);
-            scene.hit_object(r);
-        }
-    }
-    return 0;
+    return EXIT_OK;
 }

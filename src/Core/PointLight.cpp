@@ -24,4 +24,11 @@ namespace RayTracer {
     math::Point3D PointLight::getPosition() const {
         return origin;
     }
+
+    math::Vector3D PointLight::vectorSurfaceToLight(const math::Point3D &surface) const
+    {
+        math::Vector3D toward(origin - surface);
+        toward.normalize();
+        return toward;
+    }
 }
