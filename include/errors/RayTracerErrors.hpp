@@ -24,6 +24,12 @@ namespace RayTracer {
         explicit ErrorPlugin(std::string message, error_severity_e severity = ERROR_SEVERITY_CRITICAL)
             : AError("Type: Plugin\nMessage: ", std::move(message), severity) {}
     };
+
+    class ErrorConfig : public AError {
+    public:
+        explicit ErrorConfig(std::string message, error_severity_e severity = ERROR_SEVERITY_CRITICAL)
+            : AError("Type: Config\nMessage: ", std::move(message), severity) {}
+    };
 }
 
 #endif // RAYTRACER_RAYTRACERERRORS_HPP
