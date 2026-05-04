@@ -6,7 +6,7 @@
 */
 
 
-#include "../include/Rectangle3D.hpp"
+#include "Core/Render/Rectangle3D.hpp"
 
 namespace RayTracer {
     Rectangle3D::Rectangle3D() {

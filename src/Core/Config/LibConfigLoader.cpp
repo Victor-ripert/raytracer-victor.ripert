@@ -6,7 +6,7 @@
 */
 
 #include <string>
-#include "Core/LibConfigLoader.hpp"
+#include "Core/Config/LibConfigLoader.hpp"
 #include "errors/RayTracerErrors.hpp"
 
 namespace RayTracer {

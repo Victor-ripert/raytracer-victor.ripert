@@ -10,7 +10,7 @@
 
 #include <libconfig.h++>
 #include <string>
-#include "Core/Color.hpp"
+#include "Core/Render/Color.hpp"
 #include "Math/Point3D.hpp"
 #include "Math/Vector3D.hpp"
 

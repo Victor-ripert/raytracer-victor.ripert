@@ -10,7 +10,7 @@
 
 #include <memory>
 #include <string>
-#include "../Core/Color.hpp"
+#include "../Core/Render/Color.hpp"
 #include "../Math/Ray.hpp"
 #include "PrimitiveConfig.hpp"
 

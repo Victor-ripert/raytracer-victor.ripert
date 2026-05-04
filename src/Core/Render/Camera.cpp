@@ -5,7 +5,7 @@
 ** RayTracing
 */
 
-#include "../include/Core/Camera.hpp"
+#include "Core/Render/Camera.hpp"
 
 namespace RayTracer {
     Camera::Camera() {

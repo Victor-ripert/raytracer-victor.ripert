@@ -5,11 +5,11 @@
 ** SceneBuilder
 */
 
-#include "Core/SceneBuilder.hpp"
-#include "Core/LibConfigLoader.hpp"
-#include "Core/PrimitiveFactory.hpp"
-#include "Core/LightFactory.hpp"
-#include "Core/ConfigParse.hpp"
+#include "Core/Scene/SceneBuilder.hpp"
+#include "Core/Config/LibConfigLoader.hpp"
+#include "Core/Factory/PrimitiveFactory.hpp"
+#include "Core/Lights/LightFactory.hpp"
+#include "Core/Config/ConfigParse.hpp"
 #include "errors/RayTracerErrors.hpp"
 
 namespace RayTracer {

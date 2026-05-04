@@ -31,17 +31,17 @@ CORE_SRC =	main.cpp \
 			src/Math/Vector3D.cpp \
 			src/Math/Point3D.cpp	\
 			src/Math/Ray.cpp \
-			src/Core/Scene.cpp \
-			src/Core/Camera.cpp \
-			src/Core/Color.cpp \
-			src/Core/PointLight.cpp \
-			src/Core/DirectionalLight.cpp \
-			src/Core/Rectangle3D.cpp \
-			src/Core/LibConfigLoader.cpp \
-			src/Core/ConfigParse.cpp \
-			src/Core/PrimitiveFactory.cpp \
-			src/Core/LightFactory.cpp \
-			src/Core/SceneBuilder.cpp
+			src/Core/Scene/Scene.cpp \
+			src/Core/Render/Camera.cpp \
+			src/Core/Render/Color.cpp \
+			src/Core/Lights/PointLight.cpp \
+			src/Core/Lights/DirectionalLight.cpp \
+			src/Core/Render/Rectangle3D.cpp \
+			src/Core/Config/LibConfigLoader.cpp \
+			src/Core/Config/ConfigParse.cpp \
+			src/Core/Factory/PrimitiveFactory.cpp \
+			src/Core/Lights/LightFactory.cpp \
+			src/Core/Scene/SceneBuilder.cpp
 
 CORE_OBJ = $(CORE_SRC:.cpp=.o)
 
@@ -59,7 +59,7 @@ PLANE_SRC = $(PLUGINS_SRC_DIR)/Primitives/Plane/Plane.cpp
 SHARED_SRC = src/Math/Vector3D.cpp \
              src/Math/Point3D.cpp \
              src/Math/Ray.cpp \
-             src/Core/Color.cpp
+             src/Core/Render/Color.cpp
 
 all: $(NAME) plugins
 

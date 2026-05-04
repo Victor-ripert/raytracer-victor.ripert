@@ -5,9 +5,9 @@
 ** PrimitiveFactory
 */
 
-#include "Core/PrimitiveFactory.hpp"
-#include "Core/ConfigParse.hpp"
-#include "Core/PluginLoader.hpp"
+#include "Core/Factory/PrimitiveFactory.hpp"
+#include "Core/Config/ConfigParse.hpp"
+#include "Core/Factory/PluginLoader.hpp"
 #include "errors/RayTracerErrors.hpp"
 
 namespace RayTracer {

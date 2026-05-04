@@ -8,9 +8,9 @@
 #include <iostream>
 #include <memory>
 #include <string>
-#include "Core/Camera.hpp"
-#include "Core/Scene.hpp"
-#include "Core/SceneBuilder.hpp"
+#include "Core/Render/Camera.hpp"
+#include "Core/Scene/Scene.hpp"
+#include "Core/Scene/SceneBuilder.hpp"
 #include "errors/IError.hpp"
 
 int main(int argc, char **argv)

@@ -9,8 +9,8 @@
 #define RAYTRACER_SCENEBUILDER_HPP
 
 #include <string>
-#include "Core/Camera.hpp"
-#include "Core/Scene.hpp"
+#include "Core/Render/Camera.hpp"
+#include "Core/Scene/Scene.hpp"
 
 namespace RayTracer {
 

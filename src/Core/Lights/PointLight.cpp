@@ -5,7 +5,7 @@
 ** PointLight
 */
 
-#include "../include/Core/PointLight.hpp"
+#include "Core/Lights/PointLight.hpp"
 
 namespace RayTracer {
     PointLight::PointLight() : origin(math::Point3D(0, 0, 0)) {}

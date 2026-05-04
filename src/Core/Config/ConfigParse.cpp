@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <cctype>
 #include <cmath>
-#include "Core/ConfigParse.hpp"
+#include "Core/Config/ConfigParse.hpp"
 #include "errors/RayTracerErrors.hpp"
 
 namespace {

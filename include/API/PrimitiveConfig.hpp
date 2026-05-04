@@ -8,7 +8,7 @@
 #ifndef RAYTRACER_PRIMITIVECONFIG_HPP
 #define RAYTRACER_PRIMITIVECONFIG_HPP
 
-#include "Core/Color.hpp"
+#include "Core/Render/Color.hpp"
 #include "Math/Point3D.hpp"
 #include "Math/Vector3D.hpp"
 

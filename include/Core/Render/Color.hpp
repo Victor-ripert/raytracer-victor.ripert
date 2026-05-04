@@ -8,7 +8,7 @@
 
 #ifndef COLOR_HPP
     #define COLOR_HPP
-    #include "../Math/Ray.hpp"
+    #include "Math/Ray.hpp"
 
 namespace RayTracer {
     class Color {

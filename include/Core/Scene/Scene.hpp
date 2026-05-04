@@ -10,8 +10,8 @@
 
 #include <vector>
 #include <memory>
-#include "../API/IPrimitive.hpp"
-#include "../API/ILight.hpp"
+#include "../../API/IPrimitive.hpp"
+#include "../../API/ILight.hpp"
 
 #define MAX_DISTANCE 1000
 

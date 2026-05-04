@@ -5,10 +5,10 @@
 ** LightFactory
 */
 
-#include "Core/LightFactory.hpp"
-#include "Core/ConfigParse.hpp"
-#include "Core/DirectionalLight.hpp"
-#include "Core/PointLight.hpp"
+#include "Core/Lights/LightFactory.hpp"
+#include "Core/Config/ConfigParse.hpp"
+#include "Core/Lights/DirectionalLight.hpp"
+#include "Core/Lights/PointLight.hpp"
 #include "errors/RayTracerErrors.hpp"
 
 namespace RayTracer {

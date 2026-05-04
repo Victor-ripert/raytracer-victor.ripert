@@ -8,8 +8,8 @@
 #include <cmath>
 #include <iostream>
 #include <memory>
-#include "../include/Core/Scene.hpp"
-#include "../include/Core/Color.hpp"
+#include "Core/Scene/Scene.hpp"
+#include "Core/Render/Color.hpp"
 
 namespace RayTracer {
     Scene::Scene() : light(nullptr) {}

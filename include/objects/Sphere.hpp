@@ -15,7 +15,7 @@
 
 #include "API/IPrimitive.hpp"
 #include "Math/Ray.hpp"
-#include "Core/Color.hpp"
+#include "Core/Render/Color.hpp"
 
 namespace RayTracer {
 
