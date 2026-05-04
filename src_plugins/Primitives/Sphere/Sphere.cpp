@@ -5,9 +5,9 @@
 ** Sphere Plugin Implementation
 */
 
-#include "../../../include/API/IMaterial.hpp"
-#include "../../../include/API/ITransformation.hpp"
-#include "Sphere.hpp"
+#include "API/IMaterial.hpp"
+#include "API/ITransformation.hpp"
+#include "objects/Sphere.hpp"
 
 namespace RayTracer {
     Sphere::Sphere() {
@@ -17,6 +17,13 @@ namespace RayTracer {
     }
 
     Sphere::Sphere(math::Point3D pos, double radius, Color color) : _pos(pos), _radius(radius), color(color) {}
+
+    void Sphere::applyConfig(const PrimitiveConfig &config)
+    {
+        _pos = config.position;
+        _radius = config.radius;
+        color = config.color;
+    }
 
     bool Sphere::hits(const Ray &ray, double tMin, double tMax) const {
         Ray localRay = _transform ? _transform->applyInverse(ray) : ray;

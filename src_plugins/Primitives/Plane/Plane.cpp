@@ -5,15 +5,24 @@
 ** Plane Plugin Implementation
 */
 
-#include "../../../include/API/IMaterial.hpp"
-#include "../../../include/API/ITransformation.hpp"
-#include "Plane.hpp"
+#include "API/IMaterial.hpp"
+#include "API/ITransformation.hpp"
+#include "objects/Plane.hpp"
 
 namespace RayTracer {
     Plane::Plane() : _point(math::Point3D()), _normal(math::Vector3D(0, 1, 0)), color(Color(128, 128, 128)) {}
 
     Plane::Plane(const math::Point3D &point, const math::Vector3D &normal, const Color &col)
         : _point(point), _normal(normal), color(col) {}
+
+    void Plane::applyConfig(const PrimitiveConfig &config)
+    {
+        _point = config.position;
+        math::Vector3D normalVector = config.normal;
+        normalVector.normalize();
+        _normal = normalVector;
+        color = config.color;
+    }
 
     bool Plane::hits(const Ray &ray, double tMin, double tMax) const {
         Ray localRay = _transform ? _transform->applyInverse(ray) : ray;
