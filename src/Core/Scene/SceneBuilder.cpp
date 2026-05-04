@@ -44,7 +44,32 @@ namespace RayTracer {
 
         if (cameraGroup.exists("position")) {
             camera.origin = ConfigParse::readPoint3(cameraGroup["position"], "camera.position");
+        } else if (cameraGroup.exists("origin")) {
+            camera.origin = ConfigParse::readPoint3(cameraGroup["origin"], "camera.origin");
         }
+
+        double verticalFov = 72.0;
+        double fovDouble = 0;
+        int fovInt = 0;
+        if (cameraGroup.lookupValue("fieldOfView", fovDouble)) {
+            verticalFov = fovDouble;
+        } else if (cameraGroup.lookupValue("fov", fovDouble)) {
+            verticalFov = fovDouble;
+        } else if (cameraGroup.lookupValue("fieldOfView", fovInt)) {
+            verticalFov = static_cast<double>(fovInt);
+        } else if (cameraGroup.lookupValue("fov", fovInt)) {
+            verticalFov = static_cast<double>(fovInt);
+        }
+        camera.setVerticalFovDegrees(verticalFov);
+
+        if (cameraGroup.exists("rotation")) {
+            camera.setRotationDegrees(ConfigParse::readVector3(cameraGroup["rotation"], "camera.rotation"));
+        } else {
+            camera.setRotationDegrees(math::Vector3D(0, 0, 0));
+        }
+
+        camera.setImageDimensions(params.width, params.height);
+        camera.rebuildViewPlane();
 
         if (root.exists("primitives")) {
             const libconfig::Setting &primitiveList = root["primitives"];

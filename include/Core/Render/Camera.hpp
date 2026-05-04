@@ -6,25 +6,31 @@
 */
 
 #ifndef CAMERA_HPP
-    #define CAMERA_HPP
-    #include <cmath>
-    #include <iostream>
-    #include "Math/Ray.hpp"
-    #include "Core/Render/Rectangle3D.hpp"
+#define CAMERA_HPP
+
+#include <cmath>
+#include <iostream>
+#include "Math/Ray.hpp"
+#include "Math/Vector3D.hpp"
+#include "Core/Render/Rectangle3D.hpp"
 
 namespace RayTracer {
     class Camera {
-        private:
         public:
             math::Point3D origin;
             Rectangle3D screen;
-            // double _rotation;
-            // double _resolution;
-            // double _fov;
 
             Camera();
+            void setImageDimensions(unsigned int width, unsigned int height);
+            void setVerticalFovDegrees(double degrees);
+            void setRotationDegrees(const math::Vector3D &eulerDegrees);
+            void rebuildViewPlane();
+
             Ray ray(double u, double v);
-            void display();
+            unsigned int _imageWidth = 0;
+            unsigned int _imageHeight = 0;
+            double _verticalFovDegrees = 72.0;
+            math::Vector3D _rotationDegrees{0, 0, 0};
     };
 }
 
