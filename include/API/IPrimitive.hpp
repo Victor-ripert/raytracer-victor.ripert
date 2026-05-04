@@ -12,6 +12,7 @@
 #include <string>
 #include "../Core/Color.hpp"
 #include "../Math/Ray.hpp"
+#include "PrimitiveConfig.hpp"
 
 namespace RayTracer {
 
@@ -21,6 +22,8 @@ namespace RayTracer {
     class IPrimitive {
     public:
         virtual ~IPrimitive() = default;
+
+        virtual void applyConfig(const PrimitiveConfig &config) = 0;
 
         virtual bool hits(const Ray &ray, double tMin, double tMax) const = 0;
 

@@ -35,6 +35,8 @@ namespace RayTracer {
          */
         virtual math::Point3D getPosition() const = 0;
 
+        virtual math::Vector3D vectorSurfaceToLight(const math::Point3D &surface) const = 0;
+
         virtual std::string getTypeName() const = 0;
     };
 
