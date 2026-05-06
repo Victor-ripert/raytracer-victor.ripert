@@ -5,8 +5,8 @@
 ** Plane Plugin
 */
 
-#ifndef RAYTRACER_PRIMITIVES_PLANE_HPP
-#define RAYTRACER_PRIMITIVES_PLANE_HPP
+#ifndef RAYTRACER_PLUGINS_PLANE_HPP
+#define RAYTRACER_PLUGINS_PLANE_HPP
 
 #include <cmath>
 #include <iostream>
@@ -47,4 +47,4 @@ namespace RayTracer {
 
 }
 
-#endif /* RAYTRACER_PRIMITIVES_PLANE_HPP */
+#endif /* RAYTRACER_PLUGINS_PLANE_HPP */

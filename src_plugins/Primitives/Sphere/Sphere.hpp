@@ -5,8 +5,8 @@
 ** Sphere Plugin
 */
 
-#ifndef RAYTRACER_PRIMITIVES_SPHERE_HPP
-#define RAYTRACER_PRIMITIVES_SPHERE_HPP
+#ifndef RAYTRACER_PLUGINS_SPHERE_HPP
+#define RAYTRACER_PLUGINS_SPHERE_HPP
 
 #include <cmath>
 #include <iostream>
@@ -49,4 +49,4 @@ namespace RayTracer {
 
 }
 
-#endif /* RAYTRACER_PRIMITIVES_SPHERE_HPP */
+#endif /* RAYTRACER_PLUGINS_SPHERE_HPP */
