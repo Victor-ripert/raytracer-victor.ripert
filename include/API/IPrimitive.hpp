@@ -37,8 +37,7 @@ namespace RayTracer {
 
         virtual std::shared_ptr<ITransformation> getTransform() const = 0;
 
-        virtual void setTransform(
-            std::shared_ptr<ITransformation> transform) = 0;
+        virtual void setTransform(std::shared_ptr<ITransformation> transform) = 0;
 
         virtual std::string getTypeName() const = 0;
     };

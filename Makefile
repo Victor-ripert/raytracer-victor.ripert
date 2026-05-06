@@ -48,6 +48,7 @@ CORE_OBJ = $(CORE_SRC:.cpp=.o)
 # Plugins (Sources in src_plugins, Binaries in plugins)
 PLUGINS_OUT_DIR = plugins
 PLUGINS_SRC_DIR = src_plugins
+PLUGINS_PRIMITIVES_INCLUDES = $(PLUGINS_SRC_DIR)/primitives
 
 SPHERE_NAME = sphere.so
 PLANE_NAME = plane.so
@@ -70,11 +71,11 @@ plugins: $(PLUGINS_OUT_DIR)/$(SPHERE_NAME) $(PLUGINS_OUT_DIR)/$(PLANE_NAME)
 
 $(PLUGINS_OUT_DIR)/$(SPHERE_NAME): $(SPHERE_SRC) $(SHARED_SRC)
 	@mkdir -p $(PLUGINS_OUT_DIR)
-	$(CXX) $(CXXFLAGS) -shared $^ -o $@
+	$(CXX) $(CXXFLAGS) -I$(PLUGINS_PRIMITIVES_INCLUDES) -shared $^ -o $@
 
 $(PLUGINS_OUT_DIR)/$(PLANE_NAME): $(PLANE_SRC) $(SHARED_SRC)
 	@mkdir -p $(PLUGINS_OUT_DIR)
-	$(CXX) $(CXXFLAGS) -shared $^ -o $@
+	$(CXX) $(CXXFLAGS) -I$(PLUGINS_PRIMITIVES_INCLUDES) -shared $^ -o $@
 
 clean:
 	rm -f $(CORE_OBJ)
