@@ -48,13 +48,15 @@ CORE_OBJ = $(CORE_SRC:.cpp=.o)
 # Plugins (Sources in src_plugins, Binaries in plugins)
 PLUGINS_OUT_DIR = plugins
 PLUGINS_SRC_DIR = src_plugins
-PLUGINS_PRIMITIVES_INCLUDES = $(PLUGINS_SRC_DIR)/primitives
 
 SPHERE_NAME = sphere.so
 PLANE_NAME = plane.so
 
-SPHERE_SRC = $(PLUGINS_SRC_DIR)/Primitives/Sphere/Sphere.cpp
-PLANE_SRC = $(PLUGINS_SRC_DIR)/Primitives/Plane/Plane.cpp
+SPHERE_DIR = $(PLUGINS_SRC_DIR)/Primitives/Sphere
+PLANE_DIR = $(PLUGINS_SRC_DIR)/Primitives/Plane
+
+SPHERE_SRC = $(SPHERE_DIR)/Sphere.cpp
+PLANE_SRC = $(PLANE_DIR)/Plane.cpp
 
 # Shared source files needed by plugins
 SHARED_SRC = src/Math/Vector3D.cpp \
@@ -71,11 +73,11 @@ plugins: $(PLUGINS_OUT_DIR)/$(SPHERE_NAME) $(PLUGINS_OUT_DIR)/$(PLANE_NAME)
 
 $(PLUGINS_OUT_DIR)/$(SPHERE_NAME): $(SPHERE_SRC) $(SHARED_SRC)
 	@mkdir -p $(PLUGINS_OUT_DIR)
-	$(CXX) $(CXXFLAGS) -I$(PLUGINS_PRIMITIVES_INCLUDES) -shared $^ -o $@
+	$(CXX) $(CXXFLAGS) -I$(SPHERE_DIR) -shared $^ -o $@
 
 $(PLUGINS_OUT_DIR)/$(PLANE_NAME): $(PLANE_SRC) $(SHARED_SRC)
 	@mkdir -p $(PLUGINS_OUT_DIR)
-	$(CXX) $(CXXFLAGS) -I$(PLUGINS_PRIMITIVES_INCLUDES) -shared $^ -o $@
+	$(CXX) $(CXXFLAGS) -I$(PLANE_DIR) -shared $^ -o $@
 
 clean:
 	rm -f $(CORE_OBJ)
