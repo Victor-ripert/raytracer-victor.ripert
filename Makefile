@@ -37,6 +37,7 @@ CORE_SRC =	main.cpp \
 			src/Core/Lights/PointLight.cpp \
 			src/Core/Lights/DirectionalLight.cpp \
 			src/Core/Render/Rectangle3D.cpp \
+			src/Core/Render/Renderer.cpp \
 			src/Core/Config/LibConfigLoader.cpp \
 			src/Core/Config/ConfigParse.cpp \
 			src/Core/Factory/PrimitiveFactory.cpp \

@@ -24,7 +24,7 @@ namespace RayTracer {
             Scene();
             ~Scene() = default;
 
-            void hit_object(Ray ray_obj);
+            Color hit_object(Ray ray_obj);
             bool hit_object_light(std::shared_ptr<ILight> l, math::Point3D target);
             void add_obj(std::shared_ptr<IPrimitive> obj);
             void add_light(std::shared_ptr<ILight> new_light);

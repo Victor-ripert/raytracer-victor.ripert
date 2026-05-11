@@ -14,12 +14,12 @@
 namespace RayTracer {
     Scene::Scene() : light(nullptr) {}
 
-    void Scene::hit_object(Ray ray_obj) {
+    Color Scene::hit_object(Ray ray_obj) {
         double distance_min = MAX_DISTANCE;
         bool any_hit = false;
         math::Point3D hit_pos;
         math::Vector3D surface_normal;
-        Color color;
+        Color color(0, 0, 0);
         math::Point3D candidate_pos;
         double new_distance = 0.0;
         double light_angle = 0.0;
@@ -39,7 +39,7 @@ namespace RayTracer {
         }
 
         if (!any_hit) {
-            std::cout << "0 0 0" << std::endl;
+            return Color(0, 0, 0);
         } else if (light) {
             if (!hit_object_light(light, hit_pos)) {
                 light_angle = getAngleFromLightAndSurface(surface_normal, light, hit_pos);
@@ -49,10 +49,9 @@ namespace RayTracer {
                 light_angle = getAngleFromLightAndSurface(surface_normal, light, hit_pos);
                 color.setShade(1 - light_angle);
             }
-            std::cout << color.to_str() << std::endl;
+            return color;
         } else {
-            // No light in scene, render flat color or black
-            std::cout << color.to_str() << std::endl;
+            return color;
         }
     }
 
