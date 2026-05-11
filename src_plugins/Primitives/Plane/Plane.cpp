@@ -5,9 +5,8 @@
 ** Plane Plugin Implementation
 */
 
-#include "API/IMaterial.hpp"
 #include "API/ITransformation.hpp"
-#include "objects/Plane.hpp"
+#include "Plane.hpp"
 
 namespace RayTracer {
     Plane::Plane() : _point(math::Point3D()), _normal(math::Vector3D(0, 1, 0)), color(Color(128, 128, 128)) {}
@@ -44,8 +43,6 @@ namespace RayTracer {
     math::Point3D Plane::get_last_hit_point() const { return _last_hit_point; }
     math::Vector3D Plane::get_last_hit_normal() const { return _last_hit_normal; }
     Color Plane::get_last_hit_surface_color() const { return color; }
-    std::shared_ptr<IMaterial> Plane::getMaterial() const { return _material; }
-    void Plane::setMaterial(std::shared_ptr<IMaterial> material) { _material = std::move(material); }
     std::shared_ptr<ITransformation> Plane::getTransform() const { return _transform; }
     void Plane::setTransform(std::shared_ptr<ITransformation> transform) { _transform = std::move(transform); }
     std::string Plane::getTypeName() const { return "plane"; }

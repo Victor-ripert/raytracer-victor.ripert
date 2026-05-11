@@ -5,9 +5,8 @@
 ** Sphere Plugin Implementation
 */
 
-#include "API/IMaterial.hpp"
 #include "API/ITransformation.hpp"
-#include "objects/Sphere.hpp"
+#include "Sphere.hpp"
 
 namespace RayTracer {
     Sphere::Sphere() {
@@ -55,8 +54,6 @@ namespace RayTracer {
     math::Point3D Sphere::get_last_hit_point() const { return _last_hit_point; }
     math::Vector3D Sphere::get_last_hit_normal() const { return _last_hit_normal; }
     Color Sphere::get_last_hit_surface_color() const { return color; }
-    std::shared_ptr<IMaterial> Sphere::getMaterial() const { return _material; }
-    void Sphere::setMaterial(std::shared_ptr<IMaterial> material) { _material = std::move(material); }
     std::shared_ptr<ITransformation> Sphere::getTransform() const { return _transform; }
     void Sphere::setTransform(std::shared_ptr<ITransformation> transform) { _transform = std::move(transform); }
     std::string Sphere::getTypeName() const { return "sphere"; }
