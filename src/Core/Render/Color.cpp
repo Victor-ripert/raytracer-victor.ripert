@@ -26,5 +26,8 @@ namespace RayTracer {
         r = r * coefficent;
         g = g * coefficent;
         b = b * coefficent;
+        r = r > 255 ? 255 : r;
+        g = g > 255 ? 255 : g;
+        b = b > 255 ? 255 : b;
     }
 }

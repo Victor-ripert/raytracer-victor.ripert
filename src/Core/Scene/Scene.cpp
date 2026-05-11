@@ -43,11 +43,17 @@ namespace RayTracer {
         } else if (light) {
             if (!hit_object_light(light, hit_pos)) {
                 light_angle = getAngleFromLightAndSurface(surface_normal, light, hit_pos);
+                light_angle /= 10;
                 color.setShade(1 - light_angle);
                 color.setShade(0.20);
             } else {
                 light_angle = getAngleFromLightAndSurface(surface_normal, light, hit_pos);
-                color.setShade(1 - light_angle);
+                if (light_angle > 0.20)
+                    color.setShade(light_angle);
+                else {
+                    color.setShade(0.20);
+                }
+                // std::cerr << light_angle << std::endl;
             }
             std::cout << color.to_str() << std::endl;
         } else {
