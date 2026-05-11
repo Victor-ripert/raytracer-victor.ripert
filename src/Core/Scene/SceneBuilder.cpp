@@ -5,11 +5,13 @@
 ** SceneBuilder
 */
 
+#include <iostream>
 #include "Core/Scene/SceneBuilder.hpp"
 #include "Core/Config/LibConfigLoader.hpp"
 #include "Core/Factory/PrimitiveFactory.hpp"
 #include "Core/Lights/LightFactory.hpp"
 #include "Core/Config/ConfigParse.hpp"
+#include "Core/Materials/DefaultMaterial.hpp"
 #include "errors/RayTracerErrors.hpp"
 
 namespace RayTracer {
@@ -40,7 +42,15 @@ namespace RayTracer {
                 const libconfig::Setting &primitiveNode = primitiveList[primitiveIndex];
                 const std::string primitiveType = ConfigParse::readType(primitiveNode, "primitives[]");
                 const PrimitiveConfig primitiveConfig = ConfigParse::readPrimitiveConfig(primitiveType, primitiveNode);
-                scene.add_obj(primitiveFactory.create(primitiveType, primitiveConfig));
+                std::shared_ptr<IPrimitive> primitive = primitiveFactory.create(primitiveType, primitiveConfig);
+                try {
+                    if (!primitive->getMaterial())
+                        throw ErrorConfig("primitive \"" + primitiveType + "\": no material specified, assigning default",  ERROR_SEVERITY_LOW);
+                } catch (const ErrorConfig &materialError) {
+                    std::cerr << materialError.what() << '\n';
+                    primitive->setMaterial(std::make_shared<DefaultMaterial>(primitiveConfig.color));
+                }
+                scene.add_obj(primitive);
             }
         }
 
