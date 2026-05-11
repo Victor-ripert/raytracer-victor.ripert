@@ -8,7 +8,7 @@
 #ifndef RAYTRACER_PRIMITIVEFACTORY_HPP
 #define RAYTRACER_PRIMITIVEFACTORY_HPP
 
-#include <memory>∆
+#include <memory>
 #include <string>
 #include "API/IPrimitive.hpp"
 
