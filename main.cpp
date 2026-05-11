@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2026
 ** Victor.ripert@epitech.eu
 ** File description:
-** raytracing_bootstrap
+** raytracing
 */
 
 #include <iostream>
@@ -11,6 +11,7 @@
 #include "Core/Render/Camera.hpp"
 #include "Core/Scene/Scene.hpp"
 #include "Core/Scene/SceneBuilder.hpp"
+#include "Core/Render/Renderer.hpp"
 #include "errors/IError.hpp"
 
 int main(int argc, char **argv)
@@ -19,7 +20,7 @@ int main(int argc, char **argv)
     constexpr int EXIT_ERROR = 84;
     
     if (argc != 2) {
-        std::cout << "USAGE: ./raytracer <SCENE.cfg>\n";
+        std::cerr << "USAGE: ./raytracer <SCENE.cfg>\n";
         return EXIT_ERROR;
     }
     if (std::string(argv[1]) == "--help" || std::string(argv[1]) == "-h") {
@@ -32,18 +33,17 @@ int main(int argc, char **argv)
         RayTracer::Camera camera;
         RayTracer::RenderParams renderParams;
 
+        // Build the scene from the config file
         RayTracer::SceneBuilder::build(argv[1], scene, camera, renderParams);
 
-        std::cout << "P3\n" << renderParams.width << ' ' << renderParams.height << "\n255\n";
+        // Core Rendering Refactor: Use the Renderer class
+        RayTracer::Renderer renderer;
+        renderer.render(scene, camera, renderParams);
+        
+        // Output Management: Save to file (defaulting to output.ppm for now)
+        renderer.saveToFile("output.ppm");
+        std::cout << "Render completed successfully. Image saved to output.ppm" << std::endl;
 
-        for (unsigned int y = 0; y < renderParams.height; ++y) {
-            for (unsigned int x = 0; x < renderParams.width; ++x) {
-                const double u = static_cast<double>(x) / static_cast<double>(renderParams.width - 1);
-                const double v = static_cast<double>(y) / static_cast<double>(renderParams.height - 1);
-                const RayTracer::Ray ray = camera.ray(u, v);
-                scene.hit_object(ray);
-            }
-        }
     } catch (const RayTracer::IError &error) {
         std::cerr << error.what() << std::endl;
         return EXIT_ERROR;
