@@ -17,7 +17,19 @@
 namespace RayTracer {
 
     /**
-     * @brief A utility class to load dynamic libraries (.so) and instantiate objects.
+     * @brief A structure to hold the library handle and factory symbols.
+     * 
+     * @tparam T The interface type (e.g., IPrimitive, ILight).
+     */
+    template <typename T>
+    struct PluginSymbols {
+        std::shared_ptr<void> handle;
+        T* (*create)();
+        void (*destroy)(T*);
+    };
+
+    /**
+     * @brief A utility class to load dynamic libraries (.so) and retrieve symbols.
      */
     class PluginLoader {
     public:
@@ -25,50 +37,42 @@ namespace RayTracer {
         ~PluginLoader() = default;
 
         /**
-         * @brief Loads a plugin and returns an instance of the requested type.
+         * @brief Loads a plugin and returns its creation/destruction symbols.
          * 
-         * @tparam T The interface type (e.g., IPrimitive, ILight).
+         * @tparam T The interface type.
          * @param path Path to the .so file.
-         * @param entryPoint The name of the C-style factory function (e.g., "create_primitive").
-         * @return std::shared_ptr<T> A managed pointer to the new instance.
+         * @param createName The name of the creation symbol.
+         * @param destroyName The name of the destruction symbol.
+         * @return PluginSymbols<T> The package of symbols.
          */
         template <typename T>
-        static std::shared_ptr<T> load(const std::string &path, const std::string &entryPoint) {
-            void *handle = dlopen(path.c_str(), RTLD_LAZY);
-            if (!handle) {
+        static PluginSymbols<T> load(const std::string &path, const std::string &createName, const std::string &destroyName) {
+            void *rawHandle = dlopen(path.c_str(), RTLD_LAZY);
+            if (!rawHandle) {
                 const char *load_error = dlerror();
                 throw ErrorPlugin(
                     std::string("PluginLoader: Failed to load ") + path + ": "
                     + (load_error ? load_error : "unknown error"));
             }
 
-            // Reset errors
-            dlerror();
+            // Create a shared_ptr for the handle with dlclose as deleter
+            std::shared_ptr<void> handle(rawHandle, dlclose);
 
-            // Function pointer type for the factory
-            typedef T* (*FactoryFunction)();
-            
-            FactoryFunction factory = reinterpret_cast<FactoryFunction>(dlsym(handle, entryPoint.c_str()));
-            
-            const char *error = dlerror();
-            if (error) {
-                dlclose(handle);
-                throw ErrorPlugin(
-                    std::string("PluginLoader: Failed to find symbol ") + entryPoint + " in " + path + ": " + error);
+            dlerror(); // Reset errors
+
+            auto create = reinterpret_cast<T* (*)()>(dlsym(rawHandle, createName.c_str()));
+            const char *createError = dlerror();
+            if (createError) {
+                throw ErrorPlugin(std::string("PluginLoader: Failed to find symbol ") + createName + ": " + createError);
             }
 
-            // Create the instance
-            T *instance = factory();
-            if (!instance) {
-                dlclose(handle);
-                throw ErrorPlugin("PluginLoader: Factory returned null in " + path);
+            auto destroy = reinterpret_cast<void (*)(T*)>(dlsym(rawHandle, destroyName.c_str()));
+            const char *destroyError = dlerror();
+            if (destroyError) {
+                throw ErrorPlugin(std::string("PluginLoader: Failed to find symbol ") + destroyName + ": " + destroyError);
             }
 
-            // Return shared_ptr with a custom deleter that also closes the library handle
-            return std::shared_ptr<T>(instance, [handle](T *ptr) {
-                delete ptr;
-                dlclose(handle);
-            });
+            return {handle, create, destroy};
         }
     };
 }
