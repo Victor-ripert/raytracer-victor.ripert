@@ -16,7 +16,7 @@ namespace RayTracer {
 
     Color::Color(size_t r, size_t g, size_t b) : r(r), g(g), b(b) {};
 
-    std::string Color::to_str() {
+    std::string Color::to_str() const {
         return std::to_string(r) + " " + std::to_string(g) + " " + std::to_string(b);
     }
 

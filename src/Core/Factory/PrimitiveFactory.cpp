@@ -19,6 +19,8 @@ namespace RayTracer {
 
     PrimitiveFactory::PrimitiveFactory(std::string pluginDirectory) : _pluginDirectory(std::move(pluginDirectory)) {}
 
+    PrimitiveFactory::~PrimitiveFactory() = default;
+
     std::string PrimitiveFactory::joinPath(const std::string &directory, const std::string &filename)
     {
         if (directory.empty())
@@ -30,14 +32,27 @@ namespace RayTracer {
 
     std::shared_ptr<IPrimitive> PrimitiveFactory::create(const std::string &typeName, const PrimitiveConfig &configuration) const
     {
-        const auto plugin = PRIMITIVE_PLUGINS.find(typeName);
-        if (plugin == PRIMITIVE_PLUGINS.end()) {
-            throw ErrorConfig(std::string("Unknown primitive type: ") + typeName);
+        if (_plugins.find(typeName) == _plugins.end()) {
+            const auto plugin = PRIMITIVE_PLUGINS.find(typeName);
+            if (plugin == PRIMITIVE_PLUGINS.end()) {
+                throw ErrorConfig(std::string("Unknown primitive type: ") + typeName);
+            }
+            const std::string sharedObject = joinPath(_pluginDirectory, plugin->second);
+            _plugins[typeName] = PluginLoader::load<IPrimitive>(sharedObject, "create_primitive", "destroy_primitive");
         }
-        const std::string sharedObject = joinPath(_pluginDirectory, plugin->second);
-        std::shared_ptr<IPrimitive> primitive = PluginLoader::load<IPrimitive>(sharedObject, "create_primitive");
-        primitive->applyConfig(configuration);
-        return primitive;
+
+        const auto &symbols = _plugins.at(typeName);
+        IPrimitive *instance = symbols.create();
+        if (!instance) {
+            throw ErrorPlugin("PrimitiveFactory: Factory returned null for " + typeName);
+        }
+
+        auto shared_primitive = std::shared_ptr<IPrimitive>(instance, [symbols](IPrimitive *ptr) {
+            symbols.destroy(ptr);
+        });
+
+        shared_primitive->applyConfig(configuration);
+        return shared_primitive;
     }
 
 }

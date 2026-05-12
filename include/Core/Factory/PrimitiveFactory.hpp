@@ -10,14 +10,16 @@
 
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include "API/IPrimitive.hpp"
+#include "PluginLoader.hpp"
 
 namespace RayTracer {
 
     class PrimitiveFactory {
         public:
             explicit PrimitiveFactory(std::string pluginDirectory);
-            ~PrimitiveFactory() = default;
+            ~PrimitiveFactory();
 
             PrimitiveFactory(const PrimitiveFactory &) = delete;
             PrimitiveFactory &operator=(const PrimitiveFactory &) = delete;
@@ -26,6 +28,7 @@ namespace RayTracer {
 
         private:
             std::string _pluginDirectory;
+            mutable std::unordered_map<std::string, PluginSymbols<IPrimitive>> _plugins;
 
             static std::string joinPath(const std::string &directory, const std::string &filename);
     };

@@ -19,7 +19,7 @@ namespace RayTracer {
 
         Color();
         Color(size_t r, size_t g, size_t b);
-        std::string to_str();
+        std::string to_str() const;
         void setShade(double coefficient);
     };
 }

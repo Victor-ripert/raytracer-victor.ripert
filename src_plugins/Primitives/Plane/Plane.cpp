@@ -51,3 +51,7 @@ namespace RayTracer {
 extern "C" RayTracer::IPrimitive* create_primitive() {
     return new RayTracer::Plane();
 }
+
+extern "C" void destroy_primitive(RayTracer::IPrimitive* primitive) {
+    delete primitive;
+}
