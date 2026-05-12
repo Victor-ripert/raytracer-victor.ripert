@@ -10,6 +10,7 @@
 #include "Core/Config/LibConfigLoader.hpp"
 #include "Core/Factory/PrimitiveFactory.hpp"
 #include "Core/Lights/LightFactory.hpp"
+#include "Core/Lights/DirectionalLight.hpp"
 #include "Core/Config/ConfigParse.hpp"
 #include "Core/Materials/DefaultMaterial.hpp"
 #include "errors/RayTracerErrors.hpp"
@@ -63,6 +64,14 @@ namespace RayTracer {
                 const std::string lightType = ConfigParse::readType(lightNode, "lights[]");
                 scene.add_light(lightFactory.create(lightType, lightNode));
             }
+        }
+
+        try {
+            if (!scene.light)
+                throw ErrorConfig("no light specified, assigning default directional light", ERROR_SEVERITY_LOW);
+        } catch (const ErrorConfig &lightError) {
+            std::cerr << lightError.what() << '\n';
+            scene.add_light(std::make_shared<DirectionalLight>(math::Vector3D(0, 1, 0)));
         }
     }
 
