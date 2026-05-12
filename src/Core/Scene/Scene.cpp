@@ -20,9 +20,10 @@ namespace RayTracer {
         math::Point3D hit_pos;
         math::Vector3D surface_normal;
         Color color;
+        Color new_color(0, 0, 0);
+        Color final_color(0, 0, 0);
         math::Point3D candidate_pos;
         double new_distance = 0.0;
-        double light_angle = 0.0;
 
         for (auto &obj : object_list) {
             if (!obj->hits(ray_obj, 1e-6, MAX_DISTANCE))
@@ -37,34 +38,46 @@ namespace RayTracer {
                 color = obj->get_last_hit_surface_color();
             }
         }
+        // std::cerr << lights.size() << std::endl;
+        for (const auto &l : lights) {
+            new_color = compute_pixel(surface_normal, hit_pos, any_hit, color, l);
+            // std::cerr << "in loop" << std::endl;
+            if (new_color.r > final_color.r)
+                final_color = new_color;
+        }
+        // std::cerr << "outside loop" << std::endl;
+        std::cout << final_color.to_str() << std::endl;
+    }
 
+    Color Scene::compute_pixel(math::Vector3D surface_normal, math::Point3D hit_pos, bool any_hit, Color color, const std::shared_ptr<ILight> &current_light) {
+        double light_angle = 0.0;
+        // Color new_color = color;
         if (!any_hit) {
-            std::cout << "0 0 0" << std::endl;
-        } else if (light) {
-            if (!hit_object_light(light, hit_pos)) {
-                light_angle = getAngleFromLightAndSurface(surface_normal, light, hit_pos);
+            return Color(0, 0, 0);
+        } else if (current_light) {
+            if (!hit_object_light(current_light, hit_pos)) {
+                light_angle = getAngleFromLightAndSurface(surface_normal, current_light, hit_pos);
                 light_angle /= 10;
                 color.setShade(1 - light_angle);
                 color.setShade(0.20);
             } else {
-                light_angle = getAngleFromLightAndSurface(surface_normal, light, hit_pos);
+                light_angle = getAngleFromLightAndSurface(surface_normal, current_light, hit_pos);
                 if (light_angle > 0.20)
                     color.setShade(light_angle);
                 else {
                     color.setShade(0.20);
                 }
-                // std::cerr << light_angle << std::endl;
             }
-            std::cout << color.to_str() << std::endl;
+            return color;
         } else {
             // No light in scene, render flat color or black
-            std::cout << color.to_str() << std::endl;
+            return color;
         }
     }
 
     bool Scene::hit_object_light(std::shared_ptr<ILight> l, math::Point3D target) {
         if (!l) return true;
-        
+
         Ray ray_to_light = l->getRayToLight(target);
         double target_distance = l->getDistanceToLight(target);
 
@@ -84,13 +97,14 @@ namespace RayTracer {
 
     void Scene::add_light(std::shared_ptr<ILight> new_light) {
         light = new_light;
+        lights.push_back(std::move(new_light));
     }
 
     double Scene::getAngleFromLightAndSurface(math::Vector3D surfaceNormal,
         std::shared_ptr<ILight> l,
         math::Point3D surface) {
         if (!l) return 0.0;
-        
+
         math::Vector3D light_direction = l->vectorSurfaceToLight(surface).normalize();
         double dot = light_direction.dot(surfaceNormal);
         return (dot < 0) ? 0 : dot;

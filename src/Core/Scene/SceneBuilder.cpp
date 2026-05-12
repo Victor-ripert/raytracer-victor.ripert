@@ -48,8 +48,8 @@ namespace RayTracer {
             const libconfig::Setting &lightList = lightListOpt->get();
             LightFactory lightFactory;
             const int lightCount = lightList.getLength();
-            if (lightCount > 0) {
-                const libconfig::Setting &lightNode = lightList[0];
+            for (int lightIndex = 0; lightIndex < lightCount; lightIndex++) {
+                const libconfig::Setting &lightNode = lightList[lightIndex];
                 const std::string lightType = ConfigParse::readType(lightNode, "lights[]");
                 scene.add_light(lightFactory.create(lightType, lightNode));
             }
