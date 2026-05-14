@@ -25,23 +25,14 @@ namespace RayTracer {
             Renderer() = default;
             ~Renderer() = default;
 
-            /**
-             * @brief Renders the scene from the camera's perspective.
-             * 
-             * @param scene The scene to render.
-             * @param camera The camera to use.
-             * @param params The rendering parameters (resolution).
-             */
-            void render(Scene &scene, Camera &camera, const RenderParams &params);
-
-            /**
-             * @brief Saves the rendered image to a PPM file.
-             * 
-             * @param filename The name of the file to save.
-             */
+            void render(const Scene &scene, Camera &camera, const RenderParams &params);
             void saveToFile(const std::string &filename) const;
 
         private:
+            Color calculateColor(const Scene &scene, const Ray &ray) const;
+            bool isInShadow(const Scene &scene, const std::shared_ptr<ILight> &light, const math::Point3D &point) const;
+            double getLightIntensity(const std::shared_ptr<ILight> &light, const math::Point3D &point, const math::Vector3D &normal) const;
+
             std::vector<std::vector<Color>> _pixels;
             unsigned int _width = 0;
             unsigned int _height = 0;

@@ -26,6 +26,7 @@ namespace RayTracer {
         std::shared_ptr<void> handle;
         T* (*create)();
         void (*destroy)(T*);
+        const char* (*getType)();
     };
 
     /**
@@ -43,10 +44,11 @@ namespace RayTracer {
          * @param path Path to the .so file.
          * @param createName The name of the creation symbol.
          * @param destroyName The name of the destruction symbol.
+         * @param typeName The name of the type identification symbol.
          * @return PluginSymbols<T> The package of symbols.
          */
         template <typename T>
-        static PluginSymbols<T> load(const std::string &path, const std::string &createName, const std::string &destroyName) {
+        static PluginSymbols<T> load(const std::string &path, const std::string &createName, const std::string &destroyName, const std::string &typeName) {
             void *rawHandle = dlopen(path.c_str(), RTLD_LAZY);
             if (!rawHandle) {
                 const char *load_error = dlerror();
@@ -72,7 +74,13 @@ namespace RayTracer {
                 throw ErrorPlugin(std::string("PluginLoader: Failed to find symbol ") + destroyName + ": " + destroyError);
             }
 
-            return {handle, create, destroy};
+            auto getType = reinterpret_cast<const char* (*)()>(dlsym(rawHandle, typeName.c_str()));
+            const char *getTypeError = dlerror();
+            if (getTypeError) {
+                throw ErrorPlugin(std::string("PluginLoader: Failed to find symbol ") + typeName + ": " + getTypeError);
+            }
+
+            return {handle, create, destroy, getType};
         }
     };
 }

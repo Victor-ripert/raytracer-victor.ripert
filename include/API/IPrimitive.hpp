@@ -8,28 +8,32 @@
 #ifndef IOBJECT_HPP
 #define IOBJECT_HPP
 
+#include <libconfig.h++>
 #include <memory>
 #include <string>
 #include "../Core/Render/Color.hpp"
 #include "../Math/Ray.hpp"
-#include "PrimitiveConfig.hpp"
 
 namespace RayTracer {
 
     class IMaterial;
     class ITransformation;
 
+    struct HitRecord {
+        double t;
+        math::Point3D hit_point;
+        math::Vector3D normal;
+        Color color;
+        std::shared_ptr<IMaterial> material;
+    };
+
     class IPrimitive {
     public:
         virtual ~IPrimitive() = default;
 
-        virtual void applyConfig(const PrimitiveConfig &config) = 0;
+        virtual void applyConfig(const libconfig::Setting &node) = 0;
 
-        virtual bool hits(const Ray &ray, double tMin, double tMax) const = 0;
-
-        virtual math::Point3D get_last_hit_point() const = 0;
-        virtual math::Vector3D get_last_hit_normal() const = 0;
-        virtual Color get_last_hit_surface_color() const = 0;
+        virtual bool hits(const Ray &ray, double tMin, double tMax, HitRecord &record) const = 0;
 
         virtual std::shared_ptr<IMaterial> getMaterial() const = 0;
 

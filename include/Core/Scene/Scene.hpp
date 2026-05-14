@@ -12,23 +12,25 @@
 #include <memory>
 #include "../../API/IPrimitive.hpp"
 #include "../../API/ILight.hpp"
-
-#define MAX_DISTANCE 1000
+#include "../Constants.hpp"
 
 namespace RayTracer {
     class Scene {
         public:
-            std::vector<std::shared_ptr<IPrimitive>> object_list;
-            std::shared_ptr<ILight> light; // Now using the Interface
-
             Scene();
             ~Scene() = default;
 
-            Color hit_object(Ray ray_obj);
-            bool hit_object_light(std::shared_ptr<ILight> l, math::Point3D target);
+            bool closestHit(const Ray &ray, double tMin, double tMax, HitRecord &record) const;
+            
             void add_obj(std::shared_ptr<IPrimitive> obj);
             void add_light(std::shared_ptr<ILight> new_light);
-            double getAngleFromLightAndSurface(math::Vector3D surfaceNormal, std::shared_ptr<ILight> l, math::Point3D surface);
+
+            const std::vector<std::shared_ptr<IPrimitive>>& getObjects() const { return _objects; }
+            const std::vector<std::shared_ptr<ILight>>& getLights() const { return _lights; }
+
+        private:
+            std::vector<std::shared_ptr<IPrimitive>> _objects;
+            std::vector<std::shared_ptr<ILight>> _lights;
     };
 }
 

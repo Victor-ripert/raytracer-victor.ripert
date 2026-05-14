@@ -8,6 +8,7 @@
 #include <cmath>
 #include <numbers>
 #include "Core/Render/Camera.hpp"
+#include "Core/Config/ConfigUtils.hpp"
 
 namespace RayTracer {
 
@@ -53,6 +54,25 @@ namespace RayTracer {
     {
         origin = math::Point3D();
         screen = Rectangle3D();
+    }
+
+    void Camera::applyConfig(const libconfig::Setting &node)
+    {
+        if (node.exists("position"))
+            origin = ConfigUtils::readPoint3(node["position"]);
+        else if (node.exists("origin"))
+            origin = ConfigUtils::readPoint3(node["origin"]);
+
+        double verticalFov = 72.0;
+        if (ConfigUtils::tryReadDouble(node, "fieldOfView", verticalFov))
+            _verticalFovDegrees = verticalFov;
+        else if (ConfigUtils::tryReadDouble(node, "fov", verticalFov))
+            _verticalFovDegrees = verticalFov;
+
+        if (node.exists("rotation"))
+            _rotationDegrees = ConfigUtils::readVector3(node["rotation"]);
+        else
+            _rotationDegrees = math::Vector3D(0, 0, 0);
     }
 
     void Camera::setImageDimensions(unsigned int width, unsigned int height)
