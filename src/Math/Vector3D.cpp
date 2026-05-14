@@ -23,12 +23,27 @@ namespace math {
         std::cout << "Vector3D(" << _x << ", " << _y << ", " << _z << ")" << std::endl;
     }
 
-    double Vector3D::length() {
+    double Vector3D::length() const {
         return sqrt(_x * _x + _y * _y + _z * _z);
     }
 
     double Vector3D::dot(const Vector3D &vec) const {
         return _x * vec._x + _y * vec._y + _z * vec._z;
+    }
+
+    double Vector3D::angle(const Vector3D &vec) const {
+        double len1 = this->length();
+        double len2 = this->length();
+        double cosValue;
+
+        if (len1 == 0.0 || len2 == 0.0)
+            return 0.00;
+        cosValue = this->dot(vec) / (len1 * len2);
+        if (cosValue > 1.0)
+            cosValue = 1.0;
+        else if (cosValue < -1.0)
+            cosValue = -1.0;
+        return std::acos(cosValue) * 180.0 / M_PI;
     }
 
     Vector3D Vector3D::normalize() {

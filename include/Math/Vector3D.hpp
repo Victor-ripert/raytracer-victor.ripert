@@ -24,8 +24,9 @@ namespace math {
             Vector3D(double x, double y, double z);
             Vector3D(Point3D point);
             void display();
-            double length();
+            double length() const;
             double dot(const Vector3D &vec) const;
+            double angle(const Vector3D &vec) const;
             Vector3D normalize();
 
             Vector3D operator+(const Vector3D vec) const;

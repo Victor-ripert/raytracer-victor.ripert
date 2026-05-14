@@ -38,6 +38,8 @@ namespace RayTracer {
         virtual math::Vector3D vectorSurfaceToLight(const math::Point3D &surface) const = 0;
 
         virtual std::string getTypeName() const = 0;
+
+        virtual  bool isInLigthningWidth(const math::Vector3D ray_to_light_vector) const = 0;
     };
 
 }

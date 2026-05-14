@@ -38,14 +38,14 @@ namespace RayTracer {
                 color = obj->get_last_hit_surface_color();
             }
         }
-        // std::cerr << lights.size() << std::endl;
         for (const auto &l : lights) {
             new_color = compute_pixel(surface_normal, hit_pos, any_hit, color, l);
-            // std::cerr << "in loop" << std::endl;
-            if (new_color.r > final_color.r)
-                final_color = new_color;
+            final_color += new_color;
+            // final_color /= 2;
+            // if (new_color.r > final_color.r)
+            //     final_color = new_color;
         }
-        // std::cerr << "outside loop" << std::endl;
+        final_color.clampColor();
         std::cout << final_color.to_str() << std::endl;
     }
 
@@ -81,6 +81,8 @@ namespace RayTracer {
         Ray ray_to_light = l->getRayToLight(target);
         double target_distance = l->getDistanceToLight(target);
 
+        if (!l->isInLigthningWidth(ray_to_light._direction))
+            return false;
         for (auto &obj : object_list) {
             if (!obj->hits(ray_to_light, 1e-6, MAX_DISTANCE))
                 continue;

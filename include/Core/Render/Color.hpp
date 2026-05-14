@@ -21,6 +21,13 @@ namespace RayTracer {
         Color(size_t r, size_t g, size_t b);
         std::string to_str();
         void setShade(double coefficient);
+        void clampColor();
+        Color operator+(const Color color) const;
+        void operator+=(const Color color);
+        Color operator/(const Color color) const;
+        void operator/=(const Color color);
+        Color operator/(const int nb) const;
+        void operator/=(const int nb);
     };
 }
 

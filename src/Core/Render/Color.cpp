@@ -30,4 +30,40 @@ namespace RayTracer {
         g = g > 255 ? 255 : g;
         b = b > 255 ? 255 : b;
     }
+
+    void Color::clampColor() {
+        r = r > 255 ? 255 : r;
+        g = g > 255 ? 255 : g;
+        b = b > 255 ? 255 : b;
+    }
+
+    Color Color::operator+(const Color color) const {
+        return Color(r + color.r, g + color.g, b + color.b);
+    }
+
+    void Color::operator+=(const Color color) {
+        r += color.r;
+        g += color.g;
+        b += color.b;
+    }
+
+    Color Color::operator/(const Color color) const {
+        return Color(r / color.r, g / color.g, b / color.b);
+    }
+
+    void Color::operator/=(const Color color) {
+        r /= color.r;
+        g /= color.g;
+        b /= color.b;
+    }
+
+    Color Color::operator/(const int nb) const {
+        return Color(r / nb, g / nb, b / nb);
+    }
+
+    void Color::operator/=(const int nb) {
+        r /= nb;
+        g /= nb;
+        b /= nb;
+    }
 }

@@ -19,7 +19,8 @@ namespace RayTracer {
     class Scene {
         public:
             std::vector<std::shared_ptr<IPrimitive>> object_list;
-            std::shared_ptr<ILight> light; // Now using the Interface
+            std::shared_ptr<ILight> light;
+            std::vector<std::shared_ptr<ILight>> lights;
 
             Scene();
             ~Scene() = default;
@@ -29,6 +30,7 @@ namespace RayTracer {
             void add_obj(std::shared_ptr<IPrimitive> obj);
             void add_light(std::shared_ptr<ILight> new_light);
             double getAngleFromLightAndSurface(math::Vector3D surfaceNormal, std::shared_ptr<ILight> l, math::Point3D surface);
+            Color compute_pixel(math::Vector3D surface_normal, math::Point3D hit_pos, bool any_hit, Color color, const std::shared_ptr<ILight> &curren_light);
     };
 }
 

@@ -31,4 +31,10 @@ namespace RayTracer {
         toward.normalize();
         return toward;
     }
+
+    bool PointLight::isInLigthningWidth(const math::Vector3D ray_to_light_vector) const { // I have to change my code, because this type of light don't need this function.
+        if (ray_to_light_vector.length() != 0) // This is bullshit to avoid compilation error, i'm going to erase it don't worry
+            return true;
+        return true;
+    }
 }

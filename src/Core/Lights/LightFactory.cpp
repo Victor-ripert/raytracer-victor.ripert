@@ -23,8 +23,9 @@ namespace RayTracer {
         }
 
         if (kind == "directional") {
+            const math::Point3D position = ConfigParse::readPoint3(node["position"], "directional.position");
             const math::Vector3D directionTowardLight = ConfigParse::readVector3(node["direction"], "directional.direction");
-            return std::make_shared<DirectionalLight>(directionTowardLight);
+            return std::make_shared<DirectionalLight>(position, directionTowardLight, 45.0);
         }
 
         throw ErrorConfig(std::string("Unknown light type: ") + typeName);
