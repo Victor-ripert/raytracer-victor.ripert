@@ -41,9 +41,6 @@ namespace RayTracer {
         for (const auto &l : lights) {
             new_color = compute_pixel(surface_normal, hit_pos, any_hit, color, l);
             final_color += new_color;
-            // final_color /= 2;
-            // if (new_color.r > final_color.r)
-            //     final_color = new_color;
         }
         final_color.clampColor();
         std::cout << final_color.to_str() << std::endl;
@@ -51,7 +48,6 @@ namespace RayTracer {
 
     Color Scene::compute_pixel(math::Vector3D surface_normal, math::Point3D hit_pos, bool any_hit, Color color, const std::shared_ptr<ILight> &current_light) {
         double light_angle = 0.0;
-        // Color new_color = color;
         if (!any_hit) {
             return Color(0, 0, 0);
         } else if (current_light) {
@@ -70,7 +66,6 @@ namespace RayTracer {
             }
             return color;
         } else {
-            // No light in scene, render flat color or black
             return color;
         }
     }

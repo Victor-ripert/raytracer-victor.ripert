@@ -25,6 +25,7 @@ namespace RayTracer {
         if (kind == "directional") {
             const math::Point3D position = ConfigParse::readPoint3(node["position"], "directional.position");
             const math::Vector3D directionTowardLight = ConfigParse::readVector3(node["direction"], "directional.direction");
+            // const double lightning_angle =    ----> rajouter l'angle deppuis le fichuer de config
             return std::make_shared<DirectionalLight>(position, directionTowardLight, 45.0);
         }
 
