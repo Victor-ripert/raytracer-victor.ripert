@@ -21,10 +21,8 @@ namespace RayTracer {
     }
 
     void Color::setShade(double coefficent) {
-        if (coefficent == 0)
-            return;
-        r = r * coefficent;
-        g = g * coefficent;
-        b = b * coefficent;
+        r = static_cast<size_t>(static_cast<double>(r) * coefficent);
+        g = static_cast<size_t>(static_cast<double>(g) * coefficent);
+        b = static_cast<size_t>(static_cast<double>(b) * coefficent);
     }
 }

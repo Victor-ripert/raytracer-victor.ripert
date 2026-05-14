@@ -39,7 +39,7 @@ CORE_SRC =	main.cpp \
 			src/Core/Render/Rectangle3D.cpp \
 			src/Core/Render/Renderer.cpp \
 			src/Core/Config/LibConfigLoader.cpp \
-			src/Core/Config/ConfigParse.cpp \
+			src/Core/Config/ConfigUtils.cpp \
 			src/Core/Factory/PrimitiveFactory.cpp \
 			src/Core/Lights/LightFactory.cpp \
 			src/Core/Scene/SceneBuilder.cpp
@@ -63,7 +63,8 @@ PLANE_SRC = $(PLANE_DIR)/Plane.cpp
 SHARED_SRC = src/Math/Vector3D.cpp \
              src/Math/Point3D.cpp \
              src/Math/Ray.cpp \
-             src/Core/Render/Color.cpp
+             src/Core/Render/Color.cpp \
+             src/Core/Config/ConfigUtils.cpp
 
 all: $(NAME) plugins
 
@@ -74,11 +75,11 @@ plugins: $(PLUGINS_OUT_DIR)/$(SPHERE_NAME) $(PLUGINS_OUT_DIR)/$(PLANE_NAME)
 
 $(PLUGINS_OUT_DIR)/$(SPHERE_NAME): $(SPHERE_SRC) $(SHARED_SRC)
 	@mkdir -p $(PLUGINS_OUT_DIR)
-	$(CXX) $(CXXFLAGS) -I$(SPHERE_DIR) -shared $^ -o $@
+	$(CXX) $(CXXFLAGS) -I$(SPHERE_DIR) -shared $^ -o $@ $(LDFLAGS)
 
 $(PLUGINS_OUT_DIR)/$(PLANE_NAME): $(PLANE_SRC) $(SHARED_SRC)
 	@mkdir -p $(PLUGINS_OUT_DIR)
-	$(CXX) $(CXXFLAGS) -I$(PLANE_DIR) -shared $^ -o $@
+	$(CXX) $(CXXFLAGS) -I$(PLANE_DIR) -shared $^ -o $@ $(LDFLAGS)
 
 clean:
 	rm -f $(CORE_OBJ)

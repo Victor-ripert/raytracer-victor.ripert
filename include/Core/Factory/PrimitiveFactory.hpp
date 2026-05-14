@@ -24,13 +24,11 @@ namespace RayTracer {
             PrimitiveFactory(const PrimitiveFactory &) = delete;
             PrimitiveFactory &operator=(const PrimitiveFactory &) = delete;
 
-            std::shared_ptr<IPrimitive> create(const std::string &typeName, const PrimitiveConfig &configuration) const;
+            std::shared_ptr<IPrimitive> create(const std::string &typeName, const libconfig::Setting &configuration) const;
 
         private:
             std::string _pluginDirectory;
-            mutable std::unordered_map<std::string, PluginSymbols<IPrimitive>> _plugins;
-
-            static std::string joinPath(const std::string &directory, const std::string &filename);
+            std::unordered_map<std::string, PluginSymbols<IPrimitive>> _plugins;
     };
 
 }

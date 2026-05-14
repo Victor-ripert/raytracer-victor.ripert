@@ -7,24 +7,35 @@
 
 #include "API/ITransformation.hpp"
 #include "Sphere.hpp"
+#include "Core/Config/ConfigUtils.hpp"
+#include "Core/Constants.hpp"
 
 namespace RayTracer {
     Sphere::Sphere() {
         _pos = math::Point3D();
         _radius = 1;
-        color = Color(255, 0, 0);
+        _color = Color(255, 0, 0);
     }
 
-    Sphere::Sphere(math::Point3D pos, double radius, Color color) : _pos(pos), _radius(radius), color(color) {}
+    Sphere::Sphere(math::Point3D pos, double radius, Color color) : _pos(pos), _radius(radius), _color(color) {}
 
-    void Sphere::applyConfig(const PrimitiveConfig &config)
+    void Sphere::applyConfig(const libconfig::Setting &node)
     {
-        _pos = config.position;
-        _radius = config.radius;
-        color = config.color;
+        if (node.exists("position")) {
+            _pos = ConfigUtils::readPoint3(node["position"]);
+        } else if (node.exists("center")) {
+            _pos = ConfigUtils::readPoint3(node["center"]);
+        }
+
+        ConfigUtils::tryReadDouble(node, "radius", _radius);
+        ConfigUtils::tryReadDouble(node, "r", _radius);
+
+        if (node.exists("color")) {
+            _color = ConfigUtils::readColor(node["color"]);
+        }
     }
 
-    bool Sphere::hits(const Ray &ray, double tMin, double tMax) const {
+    bool Sphere::hits(const Ray &ray, double tMin, double tMax, HitRecord &record) const {
         Ray localRay = _transform ? _transform->applyInverse(ray) : ray;
         math::Vector3D L = localRay._origin - _pos;
         double a = localRay._direction.dot(localRay._direction);
@@ -46,14 +57,14 @@ namespace RayTracer {
         bool front_face = outward_normal.dot(localRay._direction) < 0;
         math::Vector3D local_normal = front_face ? outward_normal : outward_normal * (-1.0);
 
-        _last_hit_point = _transform ? _transform->transform_point_forward(local_hit) : local_hit;
-        _last_hit_normal = _transform ? _transform->transform_normal_forward(local_normal) : local_normal;
+        record.t = root;
+        record.hit_point = _transform ? _transform->transform_point_forward(local_hit) : local_hit;
+        record.normal = _transform ? _transform->transform_normal_forward(local_normal) : local_normal;
+        record.color = _color;
+        record.material = _material;
         return true;
     }
 
-    math::Point3D Sphere::get_last_hit_point() const { return _last_hit_point; }
-    math::Vector3D Sphere::get_last_hit_normal() const { return _last_hit_normal; }
-    Color Sphere::get_last_hit_surface_color() const { return color; }
     std::shared_ptr<ITransformation> Sphere::getTransform() const { return _transform; }
     void Sphere::setTransform(std::shared_ptr<ITransformation> transform) { _transform = std::move(transform); }
     std::string Sphere::getTypeName() const { return "sphere"; }
@@ -78,4 +89,8 @@ extern "C" RayTracer::IPrimitive* create_primitive() {
 
 extern "C" void destroy_primitive(RayTracer::IPrimitive* primitive) {
     delete primitive;
+}
+
+extern "C" const char* get_type() {
+    return "sphere";
 }

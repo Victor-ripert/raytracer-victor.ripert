@@ -13,6 +13,7 @@
 #include "Math/Ray.hpp"
 #include "Math/Vector3D.hpp"
 #include "Core/Render/Rectangle3D.hpp"
+#include <libconfig.h++>
 
 namespace RayTracer {
     class Camera {
@@ -21,6 +22,7 @@ namespace RayTracer {
             Rectangle3D screen;
 
             Camera();
+            void applyConfig(const libconfig::Setting &node);
             void setImageDimensions(unsigned int width, unsigned int height);
             void setVerticalFovDegrees(double degrees);
             void setRotationDegrees(const math::Vector3D &eulerDegrees);

@@ -24,22 +24,16 @@ namespace RayTracer {
     class Sphere : public APrimitive {
         private:
             std::shared_ptr<ITransformation> _transform{};
-            mutable math::Point3D _last_hit_point{};
-            mutable math::Vector3D _last_hit_normal{};
-
-        public:
             math::Point3D _pos;
             double _radius;
-            Color color;
+            Color _color;
 
+        public:
             Sphere();
             Sphere(math::Point3D pos, double radius, Color color);
 
-            bool hits(const Ray &ray, double tMin, double tMax) const override;
-            void applyConfig(const PrimitiveConfig &config) override;
-            math::Point3D get_last_hit_point() const override;
-            math::Vector3D get_last_hit_normal() const override;
-            Color get_last_hit_surface_color() const override;
+            bool hits(const Ray &ray, double tMin, double tMax, HitRecord &record) const override;
+            void applyConfig(const libconfig::Setting &node) override;
             std::shared_ptr<ITransformation> getTransform() const override;
             void setTransform(std::shared_ptr<ITransformation> transform) override;
             std::string getTypeName() const override;
