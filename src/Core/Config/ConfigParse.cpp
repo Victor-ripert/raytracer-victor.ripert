@@ -47,8 +47,14 @@ namespace {
 
         if (!tryReadDouble(node, "radius", config.radius))
             tryReadDouble(node, "r", config.radius);
+
         if (node.exists("color"))
             config.color = RayTracer::ConfigParse::readRgbColor(node["color"], "sphere.color");
+
+        if (node.exists("translation")) {
+            math::Vector3D translation = RayTracer::ConfigParse::readVector3(node["translation"], "sphere.translation");
+            config.position += translation;
+        }
         return config;
     }
 
