@@ -22,7 +22,7 @@ namespace RayTracer {
 
             bool closestHit(const Ray &ray, double tMin, double tMax, HitRecord &record) const;
             
-            void add_obj(std::shared_ptr<IPrimitive> obj);
+            void add_primitive(std::shared_ptr<IPrimitive> primitive);
             void add_light(std::shared_ptr<ILight> new_light);
 
             const std::vector<std::shared_ptr<IPrimitive>>& getObjects() const { return _objects; }
