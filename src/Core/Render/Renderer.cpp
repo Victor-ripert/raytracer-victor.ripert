@@ -7,6 +7,9 @@
 
 #include <fstream>
 #include <iostream>
+#include <thread>
+#include <vector>
+#include <iomanip>
 #include "Core/Render/Renderer.hpp"
 #include "Core/Constants.hpp"
 
@@ -18,13 +21,36 @@ namespace RayTracer {
         _height = params.height;
         _pixels.assign(_height, std::vector<Color>(_width));
 
-        for (unsigned int y = 0; y < _height; ++y) {
+        unsigned int numThreads = std::thread::hardware_concurrency();
+        if (numThreads == 0) numThreads = 1;
+
+        std::vector<std::thread> threads;
+        std::atomic<unsigned int> completedRows(0);
+        unsigned int rowsPerThread = _height / numThreads;
+
+        std::cout << "Rendering with " << numThreads << " threads..." << std::endl;
+
+        for (unsigned int i = 0; i < numThreads; ++i) {
+            unsigned int startY = i * rowsPerThread;
+            unsigned int endY = (i == numThreads - 1) ? _height : (i + 1) * rowsPerThread;
+            threads.emplace_back(&Renderer::renderRows, this, std::ref(scene), std::ref(camera), startY, endY, std::ref(completedRows));
+        }
+
+        for (auto &t : threads) {
+            t.join();
+        }
+    }
+
+    void Renderer::renderRows(const Scene &scene, Camera &camera, unsigned int startY, unsigned int endY, std::atomic<unsigned int> &completedRows)
+    {
+        for (unsigned int y = startY; y < endY; ++y) {
             for (unsigned int x = 0; x < _width; ++x) {
                 const double u = static_cast<double>(x) / static_cast<double>(_width - 1);
                 const double v = static_cast<double>(y) / static_cast<double>(_height - 1);
                 const Ray ray = camera.ray(u, v);
                 _pixels[y][x] = calculateColor(scene, ray);
             }
+            completedRows++;
         }
     }
 
@@ -49,7 +75,6 @@ namespace RayTracer {
             }
         }
 
-        // Apply a simple ambient light component (e.g., 20% intensity)
         double ambient = 0.2;
         double intensity = std::min(1.0, ambient + totalIntensity);
         

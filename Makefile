@@ -8,8 +8,8 @@
 NAME = raytracer
 
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -Wextra -Werror -I./include -fPIC -g3
-LDFLAGS = -ldl
+CXXFLAGS = -std=c++20 -Wall -Wextra -Werror -I./include -fPIC -g3 -pthread
+LDFLAGS = -ldl -pthread
 
 LIBCONFIG_LDFLAGS = $(shell pkg-config --silence-errors --libs libconfig++ 2>/dev/null)
 LIBCONFIG_CFLAGS  = $(shell pkg-config --silence-errors --cflags libconfig++ 2>/dev/null)

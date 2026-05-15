@@ -10,6 +10,7 @@
 
 #include <string>
 #include <vector>
+#include <atomic>
 #include "Core/Scene/Scene.hpp"
 #include "Core/Render/Camera.hpp"
 #include "Core/Render/Color.hpp"
@@ -29,6 +30,7 @@ namespace RayTracer {
             void saveToFile(const std::string &filename) const;
 
         private:
+            void renderRows(const Scene &scene, Camera &camera, unsigned int startY, unsigned int endY, std::atomic<unsigned int> &completedRows);
             Color calculateColor(const Scene &scene, const Ray &ray) const;
             bool isInShadow(const Scene &scene, const std::shared_ptr<ILight> &light, const math::Point3D &point) const;
             double getLightIntensity(const std::shared_ptr<ILight> &light, const math::Point3D &point, const math::Vector3D &normal) const;
