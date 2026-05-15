@@ -14,8 +14,15 @@
 
 namespace RayTracer {
 
+    /**
+     * @brief A simple matte material that just reflects a constant color (albedo).
+     */
     class DefaultMaterial : public IMaterial {
     public:
+        /**
+         * @brief Construct a new Default Material.
+         * @param color The RGB color of the material.
+         */
         explicit DefaultMaterial(const Color &color)
             : _albedo(
                 static_cast<double>(color.r) / 255.0,
@@ -24,14 +31,17 @@ namespace RayTracer {
 
         ~DefaultMaterial() override = default;
 
+        /** @return The constant albedo vector. */
         math::Vector3D getAlbedo(const math::Point3D & /*point*/, const math::Vector3D & /*normal*/) const override { return _albedo; }
 
+        /** @return ScatterResult with attenuation but no scattered ray (matte). */
         ScatterResult scatter(const Ray & /*in*/, const math::Point3D & /*point*/, const math::Vector3D & /*normal*/) const override {return ScatterResult{_albedo, std::nullopt};}
 
+        /** @return "default" */
         std::string getTypeName() const override { return "default"; }
 
     private:
-        math::Vector3D _albedo;
+        math::Vector3D _albedo; /**< Internal RGB albedo normalized to [0, 1] */
     };
 
 }

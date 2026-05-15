@@ -87,7 +87,11 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 	rm -rf $(PLUGINS_OUT_DIR)
+	rm -rf docs
+
+doc:
+	doxygen Doxyfile
 
 re: fclean all
 
-.PHONY: all clean fclean re plugins
+.PHONY: all clean fclean re plugins doc

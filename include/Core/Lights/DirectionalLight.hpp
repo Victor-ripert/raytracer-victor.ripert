@@ -12,17 +12,27 @@
 
 namespace RayTracer {
 
+    /**
+     * @brief Light source that illuminates from a constant direction (e.g., the Sun).
+     */
     class DirectionalLight : public ILight {
         public:
-            math::Vector3D towardLight{0, 1, 0};
+            math::Vector3D towardLight{0, 1, 0}; /**< Unit vector pointing towards the light source */
 
+            /** @brief Default constructor (pointing up). */
             DirectionalLight();
+            /** @brief Constructor with a custom direction. */
             explicit DirectionalLight(math::Vector3D unitTowardLight);
 
+            /** @return Ray from hit point towards infinity in the light direction. */
             Ray getRayToLight(const math::Point3D &point) const override;
+            /** @return Infinity, as directional lights have no position. */
             double getDistanceToLight(const math::Point3D &point) const override;
+            /** @return A point at infinity. */
             math::Point3D getPosition() const override;
+            /** @return The constant towardLight vector. */
             math::Vector3D vectorSurfaceToLight(const math::Point3D &surface) const override;
+            /** @return "directional" */
             std::string getTypeName() const override { return "directional"; }
     };
 
