@@ -8,6 +8,7 @@
 #ifndef RAYTRACER_IMATERIAL_HPP
 #define RAYTRACER_IMATERIAL_HPP
 
+#include <libconfig.h++>
 #include <optional>
 #include <string>
 #include "../Math/Point3D.hpp"
@@ -19,11 +20,14 @@ namespace RayTracer {
     struct ScatterResult {
         math::Vector3D attenuation{1, 1, 1};
         std::optional<Ray> scattered;
+        double blend = 1.0;
     };
 
     class IMaterial {
     public:
         virtual ~IMaterial() = default;
+
+        virtual void applyConfig(const libconfig::Setting &node) = 0;
 
         virtual math::Vector3D getAlbedo(const math::Point3D &point, const math::Vector3D &normal) const = 0;
 
