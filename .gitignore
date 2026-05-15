@@ -51,3 +51,5 @@
 raytracer.pdf
 *.txt
 output.ppm
+docs
+doxygen

@@ -15,17 +15,28 @@ namespace math {
 }
 
 namespace math {
+    /**
+     * @brief Class representing a 3D vector and its mathematical operations.
+     */
     class Vector3D {
         private:
         public:
             double _x, _y, _z;
 
+            /** @brief Default constructor (0,0,0). */
             Vector3D();
+            /** @brief Constructor with coordinates. */
             Vector3D(double x, double y, double z);
+            /** @brief Conversion constructor from Point3D. */
             Vector3D(Point3D point);
+            
+            /** @brief Print vector coordinates to stdout. */
             void display();
+            /** @return The Euclidean length of the vector. */
             double length();
+            /** @brief Calculate the dot product with another vector. */
             double dot(const Vector3D &vec) const;
+            /** @return A new normalized (unit length) vector. */
             Vector3D normalize();
 
             Vector3D operator+(const Vector3D vec) const;

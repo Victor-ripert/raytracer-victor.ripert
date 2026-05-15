@@ -15,15 +15,20 @@
 
 namespace RayTracer {
 
+    /**
+     * @brief Abstract base class for primitives, providing common material management.
+     */
     class APrimitive : public IPrimitive {
         protected:
-            std::shared_ptr<IMaterial> _material{};
+            std::shared_ptr<IMaterial> _material{}; /**< The material applied to the primitive */
 
         public:
-            ~APrimitive() override = default;
+            virtual ~APrimitive() override = default;
 
+            /** @return The material associated with this primitive. */
             std::shared_ptr<IMaterial> getMaterial() const override { return _material; }
 
+            /** @param material The new material to assign to this primitive. */
             void setMaterial(std::shared_ptr<IMaterial> material) override { _material = std::move(material); }
         };
 
