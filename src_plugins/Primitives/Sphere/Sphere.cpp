@@ -53,7 +53,7 @@ namespace RayTracer {
         if (root > tMax) return false;
 
         math::Point3D local_hit = localRay._origin + (localRay._direction * root);
-        math::Vector3D outward_normal = local_hit - _pos;
+        math::Vector3D outward_normal = (local_hit - _pos).normalize();
         bool front_face = outward_normal.dot(localRay._direction) < 0;
         math::Vector3D local_normal = front_face ? outward_normal : outward_normal * (-1.0);
 

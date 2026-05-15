@@ -21,7 +21,6 @@ namespace RayTracer {
 
             Rectangle3D();
             math::Point3D pointAt(double u, double v);
-            void display();
     };
 }
 

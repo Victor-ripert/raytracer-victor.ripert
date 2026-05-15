@@ -21,7 +21,6 @@ namespace RayTracer {
 
             Ray();
             Ray(math::Point3D origin, math::Vector3D direction);
-            void display();
     };
 }
 
