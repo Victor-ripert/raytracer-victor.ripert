@@ -8,6 +8,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <filesystem>
 #include "Core/Render/Camera.hpp"
 #include "Core/Scene/Scene.hpp"
 #include "Core/Scene/SceneBuilder.hpp"
@@ -23,7 +24,8 @@ int main(int argc, char **argv)
         std::cerr << "USAGE: ./raytracer <SCENE.cfg>\n";
         return EXIT_ERROR;
     }
-    if (std::string(argv[1]) == "--help" || std::string(argv[1]) == "-h") {
+    std::string configPath(argv[1]);
+    if (configPath == "--help" || configPath == "-h") {
         std::cout << "USAGE: ./raytracer <SCENE.cfg>\n";
         return EXIT_OK;
     }
@@ -34,15 +36,24 @@ int main(int argc, char **argv)
         RayTracer::RenderParams renderParams;
 
         // Build the scene from the config file
-        RayTracer::SceneBuilder::build(argv[1], scene, camera, renderParams);
+        RayTracer::SceneBuilder::build(configPath, scene, camera, renderParams);
 
         // Core Rendering Refactor: Use the Renderer class
         RayTracer::Renderer renderer;
         renderer.render(scene, camera, renderParams);
         
-        // Output Management: Save to file (defaulting to output.ppm for now)
-        renderer.saveToFile("output.ppm");
-        std::cout << "Render completed successfully. Image saved to output.ppm" << std::endl;
+        // Output Management: Save to screenshots/ folder with config filename
+        std::filesystem::path p(configPath);
+        std::string filename = p.stem().string() + ".ppm";
+        std::filesystem::path outputDir("screenshots");
+        
+        if (!std::filesystem::exists(outputDir)) {
+            std::filesystem::create_directory(outputDir);
+        }
+        
+        std::filesystem::path outputPath = outputDir / filename;
+        renderer.saveToFile(outputPath.string());
+        std::cout << "Render completed successfully. Image saved to " << outputPath.string() << std::endl;
 
     } catch (const RayTracer::IError &error) {
         std::cerr << error.what() << std::endl;
