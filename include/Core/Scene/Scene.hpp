@@ -38,7 +38,7 @@ namespace RayTracer {
             bool closestHit(const Ray &ray, double tMin, double tMax, HitRecord &record) const;
             
             /** @brief Add a primitive to the scene. */
-            void add_obj(std::shared_ptr<IPrimitive> obj);
+            void add_primitive(std::shared_ptr<IPrimitive> primitive);
             /** @brief Add a light source to the scene. */
             void add_light(std::shared_ptr<ILight> new_light);
 

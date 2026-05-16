@@ -30,8 +30,8 @@ namespace RayTracer {
         return hit_anything;
     }
 
-    void Scene::add_obj(std::shared_ptr<IPrimitive> obj) {
-        _objects.push_back(std::move(obj));
+    void Scene::add_primitive(std::shared_ptr<IPrimitive> primitive) {
+        _objects.push_back(std::move(primitive));
     }
 
     void Scene::add_light(std::shared_ptr<ILight> new_light) {

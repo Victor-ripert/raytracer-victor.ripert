@@ -5,6 +5,7 @@
 ** SceneBuilder
 */
 
+#include <filesystem>
 #include <iostream>
 #include "Core/Scene/SceneBuilder.hpp"
 #include "Core/Config/LibConfigLoader.hpp"
@@ -12,7 +13,8 @@
 #include "Core/Factory/PrimitiveFactory.hpp"
 #include "Core/Lights/LightFactory.hpp"
 #include "Core/Lights/DirectionalLight.hpp"
-#include "Core/Materials/DefaultMaterial.hpp"
+#include "Core/Materials/Default.hpp"
+#include "Core/Materials/MaterialFactory.hpp"
 #include "errors/RayTracerErrors.hpp"
 
 namespace RayTracer {
@@ -25,6 +27,9 @@ namespace RayTracer {
 
         std::string pluginDir = "plugins";
         root.lookupValue("plugin_dir", pluginDir);
+
+        const std::filesystem::path primitivesPluginPath = std::filesystem::path(pluginDir) / "primitives";
+        const std::filesystem::path materialsPluginPath = std::filesystem::path(pluginDir) / "materials";
 
         if (!root.exists("camera"))
             throw ErrorConfig("missing required group \"camera\"");
@@ -46,18 +51,32 @@ namespace RayTracer {
 
         if (auto primitiveListOpt = ConfigUtils::optionalList(root, "primitives")) {
             const libconfig::Setting &primitiveList = primitiveListOpt->get();
-            PrimitiveFactory primitiveFactory(pluginDir);
+            PrimitiveFactory primitiveFactory(primitivesPluginPath.string());
+            MaterialFactory materialFactory(materialsPluginPath.string());
             const int primitiveCount = primitiveList.getLength();
+
             for (int primitiveIndex = 0; primitiveIndex < primitiveCount; ++primitiveIndex) {
                 const libconfig::Setting &primitiveNode = primitiveList[primitiveIndex];
                 std::string type;
                 if (!primitiveNode.lookupValue("type", type))
                     continue;
                 std::shared_ptr<IPrimitive> primitive = primitiveFactory.create(ConfigUtils::toLower(type), primitiveNode);
-                if (!primitive->getMaterial()) {
-                    primitive->setMaterial(std::make_shared<DefaultMaterial>(Color(128, 128, 128)));
+                if (primitiveNode.exists("material")) {
+                    const libconfig::Setting &materialNode = primitiveNode["material"];
+                    std::string materialType;
+                    if (materialNode.lookupValue("type", materialType)) {
+                        try {
+                            primitive->setMaterial(materialFactory.create(ConfigUtils::toLower(materialType), materialNode));
+                        } catch (const ErrorConfig &error) {
+                            std::cerr << "material: " << error.what() << ", using default material\n";
+                        }
+                    }
                 }
-                scene.add_obj(primitive);
+                if (!primitive->getMaterial()) {
+                    Color fallbackColor = primitiveNode.exists("color") ? ConfigUtils::readColor(primitiveNode["color"]) : Color(128, 128, 128);
+                    primitive->setMaterial(std::make_shared<Default>(fallbackColor));
+                }
+                scene.add_primitive(primitive);
             }
         }
 

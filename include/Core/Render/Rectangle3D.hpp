@@ -30,8 +30,6 @@ namespace RayTracer {
              * @return The 3D point.
              */
             math::Point3D pointAt(double u, double v);
-            /** @brief Display rectangle properties to stdout. */
-            void display();
     };
 }
 

@@ -8,9 +8,9 @@
 #ifndef RAYTRACER_RENDERER_HPP
 #define RAYTRACER_RENDERER_HPP
 
+#include <atomic>
 #include <string>
 #include <vector>
-#include <atomic>
 #include "Core/Scene/Scene.hpp"
 #include "Core/Render/Camera.hpp"
 #include "Core/Render/Color.hpp"
@@ -31,7 +31,8 @@ namespace RayTracer {
 
         private:
             void renderRows(const Scene &scene, Camera &camera, unsigned int startY, unsigned int endY, std::atomic<unsigned int> &completedRows);
-            Color calculateColor(const Scene &scene, const Ray &ray) const;
+            Color calculateColor(const Scene &scene, const Ray &ray, int depth = 0) const;
+            Color computeDirectLighting(const Scene &scene, const HitRecord &record) const;
             bool isInShadow(const Scene &scene, const std::shared_ptr<ILight> &light, const math::Point3D &point) const;
             double getLightIntensity(const std::shared_ptr<ILight> &light, const math::Point3D &point, const math::Vector3D &normal) const;
 

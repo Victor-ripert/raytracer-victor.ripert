@@ -5,8 +5,8 @@
 ** RayTracer
 */
 
-#ifndef IOBJECT_HPP
-#define IOBJECT_HPP
+#ifndef PRIMITIVE_HPP
+#define PRIMITIVE_HPP
 
 #include <libconfig.h++>
 #include <memory>
@@ -75,4 +75,4 @@ namespace RayTracer {
 
 }
 
-#endif /* IOBJECT_HPP */
+#endif /* IPRIMITIVE_HPP */

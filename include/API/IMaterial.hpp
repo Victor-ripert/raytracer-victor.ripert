@@ -8,6 +8,7 @@
 #ifndef RAYTRACER_IMATERIAL_HPP
 #define RAYTRACER_IMATERIAL_HPP
 
+#include <libconfig.h++>
 #include <optional>
 #include <string>
 #include "../Math/Point3D.hpp"
@@ -22,6 +23,7 @@ namespace RayTracer {
     struct ScatterResult {
         math::Vector3D attenuation{1, 1, 1}; /**< How much light is absorbed/reflected by the material */
         std::optional<Ray> scattered;         /**< The new ray after reflection/refraction (if any) */
+        double blend = 1.0;
     };
 
     /**
@@ -30,6 +32,8 @@ namespace RayTracer {
     class IMaterial {
     public:
         virtual ~IMaterial() = default;
+
+        virtual void applyConfig(const libconfig::Setting &node) = 0;
 
         /**
          * @brief Get the base color (albedo) of the material at a specific point.

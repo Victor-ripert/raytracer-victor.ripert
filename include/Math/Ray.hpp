@@ -28,8 +28,6 @@ namespace RayTracer {
             Ray();
             /** @brief Constructor with origin and direction. */
             Ray(math::Point3D origin, math::Vector3D direction);
-            /** @brief Print ray properties to stdout. */
-            void display();
     };
 }
 
