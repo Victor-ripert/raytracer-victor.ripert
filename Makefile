@@ -52,12 +52,18 @@ PLUGINS_SRC_DIR = src_plugins
 
 SPHERE_NAME = sphere.so
 PLANE_NAME = plane.so
+CYLINDER_NAME = cylinder.so
+CONE_NAME = cone.so
 
 SPHERE_DIR = $(PLUGINS_SRC_DIR)/Primitives/Sphere
 PLANE_DIR = $(PLUGINS_SRC_DIR)/Primitives/Plane
+CYLINDER_DIR = $(PLUGINS_SRC_DIR)/Primitives/Cylinder
+CONE_DIR = $(PLUGINS_SRC_DIR)/Primitives/Cone
 
 SPHERE_SRC = $(SPHERE_DIR)/Sphere.cpp
 PLANE_SRC = $(PLANE_DIR)/Plane.cpp
+CYLINDER_SRC = $(CYLINDER_DIR)/Cylinder.cpp
+CONE_SRC = $(CONE_DIR)/Cone.cpp
 
 # Shared source files needed by plugins
 SHARED_SRC = src/Math/Vector3D.cpp \
@@ -71,7 +77,8 @@ all: $(NAME) plugins
 $(NAME): $(CORE_OBJ)
 	$(CXX) $(CXXFLAGS) $(CORE_OBJ) -o $(NAME) $(LDFLAGS)
 
-plugins: $(PLUGINS_OUT_DIR)/$(SPHERE_NAME) $(PLUGINS_OUT_DIR)/$(PLANE_NAME)
+plugins: $(PLUGINS_OUT_DIR)/$(SPHERE_NAME) $(PLUGINS_OUT_DIR)/$(PLANE_NAME) \
+         $(PLUGINS_OUT_DIR)/$(CYLINDER_NAME) $(PLUGINS_OUT_DIR)/$(CONE_NAME)
 
 $(PLUGINS_OUT_DIR)/$(SPHERE_NAME): $(SPHERE_SRC) $(SHARED_SRC)
 	@mkdir -p $(PLUGINS_OUT_DIR)
@@ -80,6 +87,14 @@ $(PLUGINS_OUT_DIR)/$(SPHERE_NAME): $(SPHERE_SRC) $(SHARED_SRC)
 $(PLUGINS_OUT_DIR)/$(PLANE_NAME): $(PLANE_SRC) $(SHARED_SRC)
 	@mkdir -p $(PLUGINS_OUT_DIR)
 	$(CXX) $(CXXFLAGS) -I$(PLANE_DIR) -shared $^ -o $@ $(LDFLAGS)
+
+$(PLUGINS_OUT_DIR)/$(CYLINDER_NAME): $(CYLINDER_SRC) $(SHARED_SRC)
+	@mkdir -p $(PLUGINS_OUT_DIR)
+	$(CXX) $(CXXFLAGS) -I$(CYLINDER_DIR) -shared $^ -o $@ $(LDFLAGS)
+
+$(PLUGINS_OUT_DIR)/$(CONE_NAME): $(CONE_SRC) $(SHARED_SRC)
+	@mkdir -p $(PLUGINS_OUT_DIR)
+	$(CXX) $(CXXFLAGS) -I$(CONE_DIR) -shared $^ -o $@ $(LDFLAGS)
 
 clean:
 	rm -f $(CORE_OBJ)
