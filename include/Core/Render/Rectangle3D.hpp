@@ -12,14 +12,23 @@
     #include "Math/Ray.hpp"
 
 namespace RayTracer {
+    /**
+     * @brief Class representing a rectangle in 3D space, used for the camera screen.
+     */
     class Rectangle3D {
         private:
         public:
-            math::Point3D origin;
-            math::Vector3D bottom_side;
-            math::Vector3D left_side;
+            math::Point3D origin;      /**< Top-left corner of the rectangle */
+            math::Vector3D bottom_side; /**< Vector representing the bottom edge */
+            math::Vector3D left_side;   /**< Vector representing the left edge */
 
             Rectangle3D();
+            /** 
+             * @brief Calculate a point on the rectangle based on normalized coordinates.
+             * @param u Horizontal interpolation [0, 1].
+             * @param v Vertical interpolation [0, 1].
+             * @return The 3D point.
+             */
             math::Point3D pointAt(double u, double v);
     };
 }

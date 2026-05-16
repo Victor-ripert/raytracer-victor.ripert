@@ -13,18 +13,28 @@
 
 namespace RayTracer {
 
+    /**
+     * @brief Wrapper around libconfig::Config for loading and accessing scene files.
+     */
     class LibConfigLoader {
         public:
             LibConfigLoader() = default;
             ~LibConfigLoader() = default;
 
+            /**
+             * @brief Load a configuration file from the disk.
+             * @param path Path to the .cfg file.
+             * @throw ErrorConfig if the file is invalid or missing.
+             */
             void load(const std::string &path);
 
+            /** @return The root settings node of the loaded configuration. */
             libconfig::Setting &getRoot();
+            /** @return The root settings node (const version). */
             const libconfig::Setting &getRoot() const;
 
         private:
-            libconfig::Config _config;
+            libconfig::Config _config; /**< The underlying libconfig object */
     };
 
 }

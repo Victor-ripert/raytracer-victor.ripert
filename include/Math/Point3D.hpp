@@ -15,14 +15,21 @@ namespace math {
 }
 
 namespace math {
+    /**
+     * @brief Class representing a 3D point in space.
+     */
     class Point3D {
         private:
         public:
             double _x, _y, _z;
 
+            /** @brief Default constructor (0,0,0). */
             Point3D();
+            /** @brief Constructor with coordinates. */
             Point3D(double x, double y, double z);
+            /** @brief Print point coordinates to stdout. */
             void display();
+            /** @brief Calculate Euclidean distance to another point. */
             double distance_point(const Point3D point) const;
 
             Point3D operator+(const Vector3D vec) const;
